@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Интерактивная виртуальная экскурсия по направлениям ООО «Новая Реальность»: полимерные материалы, ПЭТ-упаковка и напитки «Русский Квас».">
+  <title>Виртуальная экскурсия — Новая Реальность</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
+</head>
+<body class="tour-page">
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Новая Реальность — главная"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="configurator.html">Конструктор</a><a class="active" href="tour.html">Экскурсия</a><a href="index.html#thermoplast">Технология</a><a href="kvass.html">Русский Квас</a><a href="contacts.html">Контакты</a>
+    <a class="employee-portal-nav" href="manager.html"><span aria-hidden="true">◈</span> Для сотрудников <b aria-hidden="true">↗</b></a></nav>
+    <div class="header-actions"><a class="employee-shortcut" href="manager.html" aria-label="Открыть демонстрационный кабинет для сотрудников">Для сотрудников <span aria-hidden="true">↗</span></a><a class="header-phone" href="tel:+79921476101">+7 (992) 147-61-01</a><a class="btn" href="contacts.html#request">Оставить заявку <span>↗</span></a><button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false">☰</button></div>
+  </div>
+</header>
+<main>
+  <section class="tour-hero">
+    <div class="tour-hero-gridline"></div>
+    <div class="container tour-hero-content">
+      <div class="tour-hero-copy">
+        <div class="breadcrumbs"><a href="index.html">Главная</a>　/　Виртуальная экскурсия</div>
+        <span class="eyebrow">Интерактивное знакомство с производством</span>
+        <h1>От сырья<br>до <em>готового продукта.</em></h1>
+        <p>Выберите направление и пройдите ключевые этапы технологического пути. Нажимайте на этапы, изучайте объяснения и открывайте связанные разделы каталога.</p>
+        <div class="tour-hero-actions"><a class="btn" href="#tour-experience">Начать экскурсию <span>↓</span></a><a class="btn btn-outline" href="contacts.html#request">Задать вопрос <span>↗</span></a></div>
+        <div class="tour-hero-meta"><span><i></i> 2 направления</span><span><i></i> 9 интерактивных этапов</span><span><i></i> Можно пройти с телефона</span></div>
+      </div>
+      <div class="tour-hero-art" aria-hidden="true">
+        <div class="tour-hero-ring ring-one"></div><div class="tour-hero-ring ring-two"></div>
+        <div class="tour-hero-core"><div class="core-orb orb-blue">◈</div><div class="core-orb orb-gold">♧</div><div class="core-center"><img src="assets/brand-emblem.svg" alt=""></div></div>
+        <div class="tour-hero-orbit-label label-top">POLYMER / PET</div><div class="tour-hero-orbit-label label-bottom">BEVERAGE / KVASS</div>
+        <div class="tour-hero-spark spark-one"></div><div class="tour-hero-spark spark-two"></div><div class="tour-hero-spark spark-three"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tour-experience-section" id="tour-experience">
+    <div class="container">
+      <div class="section-heading tour-heading reveal"><span class="eyebrow">Выберите маршрут</span><h2>Два направления — одна производственная философия.</h2><p>Переключайтесь между маршрутами. На каждом этапе меняются схема, описание и подсказки.</p></div>
+      <div class="tour-experience reveal" data-virtual-tour>
+        <div class="tour-experience-top">
+          <div class="tour-track-switch" role="group" aria-label="Выберите направление">
+            <button class="tour-track-button active" type="button" data-tour-track-choice="pet" aria-pressed="true"><span class="track-icon">◈</span><span><b>ПЭТ и полимеры</b><small>Сырьё · материал · изделие</small></span><i>→</i></button>
+            <button class="tour-track-button" type="button" data-tour-track-choice="drinks" aria-pressed="false"><span class="track-icon track-icon-gold">♧</span><span><b>Напитки</b><small>Подготовка · продукт · розлив</small></span><i>→</i></button>
+          </div>
+          <div class="tour-progress-meta"><span>ВАШ МАРШРУТ</span><strong><b data-tour-current>01</b><i>/</i><span data-tour-total>04</span></strong></div>
+        </div>
+
+        <div class="tour-workspace">
+          <div class="tour-visual-column">
+            <div class="tour-visual-topline"><span class="tour-live-dot"></span><span data-tour-visual-label>ПОЛИМЕРНЫЙ ЦИКЛ</span><span class="tour-visual-badge">СХЕМА ПРОЦЕССА</span></div>
+            <div class="tour-artwork" data-tour-artwork data-track="pet" data-step="0">
+              <div class="tour-art-grid"></div><div class="tour-art-halo"></div>
+              <svg class="tour-process-svg" viewBox="0 0 760 470" role="img" aria-label="Схематичная интерактивная иллюстрация производственного этапа">
+                <defs>
+                  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d5e8eb"/><stop offset=".28" stop-color="#607d88"/><stop offset=".58" stop-color="#253a44"/><stop offset="1" stop-color="#9bb7bf"/></linearGradient>
+                  <linearGradient id="metalDark" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#526d78"/><stop offset="1" stop-color="#18252d"/></linearGradient>
+                  <linearGradient id="aqua" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4d9eb8"/><stop offset=".5" stop-color="#d6f6ff"/><stop offset="1" stop-color="#4d9eb8"/></linearGradient>
+                  <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#8e5528"/><stop offset=".5" stop-color="#ffd18b"/><stop offset="1" stop-color="#9a5c28"/></linearGradient>
+                  <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d99c52" stop-opacity=".72"/><stop offset="1" stop-color="#8a481d" stop-opacity=".9"/></linearGradient>
+                  <filter id="glowAqua"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="glowGold"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <ellipse cx="380" cy="407" rx="275" ry="27" fill="#071116" opacity=".7"/>
+                <path d="M82 386H678" stroke="#71909a" stroke-opacity=".35" stroke-width="2"/>
+                <path d="M125 407L200 386M250 407L290 386M380 407L380 386M510 407L470 386M635 407L560 386" stroke="#71909a" stroke-opacity=".22" stroke-width="2"/>
+
+                <!-- PET stage 1: polymer feedstock -->
+                <g class="tour-art-layer pet-layer pet-layer-0">
+                  <path d="M290 70H468L438 190H320Z" fill="url(#metal)" stroke="#c0d9df" stroke-width="3"/>
+                  <path d="M312 91H447L425 166H335Z" fill="#182a33"/>
+                  <path d="M340 169H420V238H340Z" fill="url(#metalDark)" stroke="#9ebbc4" stroke-width="3"/>
+                  <path d="M350 206H410L410 247H350Z" fill="#263c45" stroke="#8baab4" stroke-width="2"/>
+                  <g fill="#79b7cc" stroke="#d2f5ff" stroke-width="1.5"><circle cx="339" cy="106" r="8"/><circle cx="367" cy="120" r="9"/><circle cx="393" cy="104" r="8"/><circle cx="421" cy="130" r="8"/><circle cx="359" cy="146" r="7"/><circle cx="401" cy="150" r="8"/><circle cx="383" cy="177" r="6"/></g>
+                  <g fill="#d4a15f"><circle cx="245" cy="245" r="8"/><circle cx="273" cy="268" r="7"/><circle cx="226" cy="284" r="6"/><circle cx="484" cy="249" r="8"/><circle cx="505" cy="276" r="6"/></g>
+                  <path d="M380 247V300" stroke="#86d5e8" stroke-width="4" stroke-dasharray="5 9" filter="url(#glowAqua)"/>
+                  <path d="M360 301L380 326L400 301" fill="none" stroke="#86d5e8" stroke-width="4"/>
+                  <text x="380" y="52" fill="#d8edf2" font-size="14" text-anchor="middle" letter-spacing="3">ПОЛИМЕРНОЕ СЫРЬЁ</text>
+                  <text x="380" y="357" fill="#8ca9b3" font-size="12" text-anchor="middle">ГРАНУЛЫ / ПОДГОТОВКА МАТЕРИАЛА</text>
+                </g>
+
+                <!-- PET stage 2: plasticising / screw barrel -->
+                <g class="tour-art-layer pet-layer pet-layer-1">
+                  <path d="M178 184H576Q599 184 599 207V276Q599 299 576 299H178Q155 299 155 276V207Q155 184 178 184Z" fill="url(#metalDark)" stroke="#b8d4dc" stroke-width="3"/>
+                  <rect x="194" y="205" width="370" height="73" rx="13" fill="#13232b" stroke="#72929e" stroke-width="2"/>
+                  <path d="M206 242H548" stroke="#6ea9bc" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M215 242L250 218L285 266L320 218L355 266L390 218L425 266L460 218L495 266L530 218" fill="none" stroke="url(#aqua)" stroke-width="9" stroke-linejoin="round"/>
+                  <g fill="#bd8958" stroke="#f7d39f" stroke-width="2"><rect x="235" y="170" width="24" height="143" rx="5"/><rect x="319" y="170" width="24" height="143" rx="5"/><rect x="403" y="170" width="24" height="143" rx="5"/><rect x="487" y="170" width="24" height="143" rx="5"/></g>
+                  <path d="M578 219L649 238L578 258Z" fill="url(#metal)" stroke="#d6edf2" stroke-width="2"/>
+                  <path d="M255 119Q380 62 505 119" fill="none" stroke="#e5ad68" stroke-width="3" stroke-dasharray="7 8" filter="url(#glowGold)"/>
+                  <g fill="#f0c184"><circle cx="280" cy="105" r="5"/><circle cx="380" cy="84" r="5"/><circle cx="480" cy="105" r="5"/></g>
+                  <text x="380" y="52" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">ПЛАСТИКАЦИЯ</text>
+                  <text x="380" y="357" fill="#8ca9b3" font-size="12" text-anchor="middle">НАГРЕВ · ПЕРЕМЕШИВАНИЕ · ПОДАЧА</text>
+                </g>
+
+                <!-- PET stage 3: forming in a mould -->
+                <g class="tour-art-layer pet-layer pet-layer-2">
+                  <rect x="160" y="135" width="183" height="225" rx="18" fill="url(#metal)" stroke="#d6e9ee" stroke-width="3"/>
+                  <rect x="417" y="135" width="183" height="225" rx="18" fill="url(#metal)" stroke="#d6e9ee" stroke-width="3"/>
+                  <rect x="186" y="159" width="131" height="174" rx="8" fill="#1a2b34" stroke="#7d9ba5" stroke-width="2"/>
+                  <rect x="443" y="159" width="131" height="174" rx="8" fill="#1a2b34" stroke="#7d9ba5" stroke-width="2"/>
+                  <path d="M318 218H442" stroke="#d99f5e" stroke-width="15" stroke-linecap="round" filter="url(#glowGold)"/>
+                  <path d="M346 218Q380 192 414 218V281Q380 302 346 281Z" fill="#8bd2e4" fill-opacity=".6" stroke="#d8f7ff" stroke-width="3"/>
+                  <path d="M380 107V185M368 172L380 187L392 172" fill="none" stroke="#d99f5e" stroke-width="5" stroke-linecap="round"/>
+                  <g fill="#9bcbd8"><circle cx="211" cy="186" r="6"/><circle cx="548" cy="186" r="6"/><circle cx="211" cy="306" r="6"/><circle cx="548" cy="306" r="6"/></g>
+                  <text x="380" y="65" fill="#d8edf2" font-size="14" text-anchor="middle" letter-spacing="3">ФОРМОВАНИЕ</text>
+                  <text x="380" y="396" fill="#8ca9b3" font-size="12" text-anchor="middle">ПОЛОСТЬ ФОРМЫ ЗАДАЁТ ГЕОМЕТРИЮ</text>
+                </g>
+
+                <!-- PET stage 4: finished product -->
+                <g class="tour-art-layer pet-layer pet-layer-3">
+                  <ellipse cx="380" cy="368" rx="150" ry="18" fill="#071319" opacity=".75"/>
+                  <path d="M325 124H435V160L456 194V337Q456 353 440 353H320Q304 353 304 337V194L325 160Z" fill="#7ab8ca" fill-opacity=".18" stroke="#d9f4fa" stroke-width="4"/>
+                  <path d="M325 124H435V160L456 194H304L325 160Z" fill="url(#aqua)" fill-opacity=".35" stroke="#c4edf5" stroke-width="3"/>
+                  <rect x="348" y="83" width="64" height="47" rx="8" fill="url(#metal)" stroke="#d9f4fa" stroke-width="3"/>
+                  <rect x="342" y="68" width="76" height="20" rx="6" fill="#263a44" stroke="#8fb9c6" stroke-width="2"/>
+                  <path d="M326 210H434M318 325H442" stroke="#d7f5fc" stroke-opacity=".55" stroke-width="4"/>
+                  <path d="M334 206V319" stroke="#fff" stroke-opacity=".5" stroke-width="7" stroke-linecap="round" filter="url(#glowAqua)"/>
+                  <path d="M450 222Q498 205 515 231" fill="none" stroke="#d9a767" stroke-width="3" stroke-dasharray="5 7"/>
+                  <g fill="#d9a767"><circle cx="520" cy="240" r="5"/><circle cx="537" cy="258" r="4"/><circle cx="512" cy="278" r="3"/></g>
+                  <text x="380" y="42" fill="#d8edf2" font-size="14" text-anchor="middle" letter-spacing="3">ГОТОВАЯ ПЭТ-ТАРА</text>
+                  <text x="380" y="397" fill="#8ca9b3" font-size="12" text-anchor="middle">ФОРМА · ВНЕШНИЙ ВИД · СПЕЦИФИКАЦИЯ</text>
+                </g>
+
+                <!-- Beverage stage 1: ingredients -->
+                <g class="tour-art-layer drink-layer drink-layer-0">
+                  <path d="M210 284L240 177L330 177L360 284Z" fill="url(#metalDark)" stroke="#c6dce1" stroke-width="3"/><path d="M237 219H334L347 270H223Z" fill="url(#amber)" fill-opacity=".68"/>
+                  <path d="M203 285H365" stroke="#d4e3e6" stroke-width="9" stroke-linecap="round"/>
+                  <path d="M390 132H530L513 293H407Z" fill="url(#metal)" stroke="#d1e6eb" stroke-width="3"/><ellipse cx="460" cy="132" rx="70" ry="17" fill="#718d97" stroke="#d1e6eb" stroke-width="3"/><ellipse cx="460" cy="293" rx="54" ry="12" fill="#1a3038"/>
+                  <path d="M420 237Q460 215 500 237V277H420Z" fill="url(#liquid)"/><path d="M460 115V212M433 184L460 214L487 184" fill="none" stroke="#e7b56f" stroke-width="6" stroke-linecap="round"/>
+                  <g fill="#d7a15e"><circle cx="164" cy="302" r="9"/><circle cx="187" cy="324" r="7"/><circle cx="148" cy="337" r="6"/><circle cx="577" cy="294" r="8"/><circle cx="598" cy="316" r="6"/></g>
+                  <path d="M158 275Q190 235 215 256" fill="none" stroke="#d7a15e" stroke-width="3" stroke-dasharray="5 7"/>
+                  <text x="380" y="65" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">ПОДГОТОВКА</text>
+                  <text x="380" y="380" fill="#9ab0b5" font-size="12" text-anchor="middle">СЫРЬЁ · КОМПОНЕНТЫ · РЕЦЕПТУРА</text>
+                </g>
+
+                <!-- Beverage stage 2: fermentation -->
+                <g class="tour-art-layer drink-layer drink-layer-1">
+                  <path d="M290 117Q290 97 380 97Q470 97 470 117V320Q470 350 380 350Q290 350 290 320Z" fill="url(#metalDark)" stroke="#d5e8eb" stroke-width="4"/>
+                  <ellipse cx="380" cy="117" rx="90" ry="21" fill="#536f79" stroke="#d5e8eb" stroke-width="3"/>
+                  <path d="M305 230Q340 211 380 230T455 230V316Q455 334 380 334T305 316Z" fill="url(#liquid)"/>
+                  <path d="M380 82V52M350 52H410" stroke="#b7d1d8" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M470 155H528V255" fill="none" stroke="#8eb4c0" stroke-width="12" stroke-linejoin="round"/>
+                  <g fill="#f7d59e" stroke="#fff0d3" stroke-width="1.5"><circle cx="344" cy="279" r="7"/><circle cx="396" cy="254" r="5"/><circle cx="421" cy="298" r="8"/><circle cx="372" cy="310" r="4"/><circle cx="350" cy="240" r="4"/></g>
+                  <path d="M380 170V203M365 190L380 206L395 190" fill="none" stroke="#f1c17e" stroke-width="4" stroke-linecap="round"/>
+                  <text x="380" y="42" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">БРОЖЕНИЕ</text>
+                  <text x="380" y="392" fill="#9ab0b5" font-size="12" text-anchor="middle">ЭТАП ФОРМИРОВАНИЯ ВКУСА КВАСА</text>
+                </g>
+
+                <!-- Beverage stage 3: blending -->
+                <g class="tour-art-layer drink-layer drink-layer-2">
+                  <path d="M170 166Q170 145 240 145Q310 145 310 166V313Q310 335 240 335Q170 335 170 313Z" fill="url(#metalDark)" stroke="#d0e5e9" stroke-width="3"/><ellipse cx="240" cy="166" rx="70" ry="18" fill="#78949d" stroke="#d0e5e9" stroke-width="3"/><path d="M187 248Q240 229 293 248V310Q240 329 187 310Z" fill="url(#liquid)"/>
+                  <path d="M450 135Q450 116 520 116Q590 116 590 135V313Q590 334 520 334Q450 334 450 313Z" fill="url(#metalDark)" stroke="#d0e5e9" stroke-width="3"/><ellipse cx="520" cy="135" rx="70" ry="18" fill="#78949d" stroke="#d0e5e9" stroke-width="3"/><path d="M467 239Q520 220 573 239V310Q520 329 467 310Z" fill="url(#liquid)"/>
+                  <path d="M310 207H450V178H492" fill="none" stroke="#b5d8df" stroke-width="12" stroke-linejoin="round"/><path d="M370 185V228M357 215L370 230L383 215" fill="none" stroke="#e2b274" stroke-width="4"/>
+                  <g fill="#f1c17e"><circle cx="345" cy="192" r="5"/><circle cx="382" cy="192" r="5"/><circle cx="420" cy="192" r="5"/></g>
+                  <text x="380" y="65" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">КУПАЖИРОВАНИЕ</text>
+                  <text x="380" y="380" fill="#9ab0b5" font-size="12" text-anchor="middle">ФОРМИРОВАНИЕ СОГЛАСОВАННОГО ВКУСА</text>
+                </g>
+
+                <!-- Beverage stage 4: quality check -->
+                <g class="tour-art-layer drink-layer drink-layer-3">
+                  <path d="M338 112H422L410 161L453 285Q463 319 427 329H333Q297 319 307 285L350 161Z" fill="#8bc7d5" fill-opacity=".15" stroke="#d4edf3" stroke-width="4"/>
+                  <path d="M328 267Q380 244 432 267L450 300Q458 321 427 324H333Q302 321 310 300Z" fill="url(#liquid)"/>
+                  <path d="M349 112H411M353 147H407" stroke="#bcd9df" stroke-width="7" stroke-linecap="round"/>
+                  <path d="M500 128L542 170L615 95" fill="none" stroke="#9ed7c2" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowAqua)"/>
+                  <rect x="142" y="210" width="64" height="120" rx="8" fill="url(#metalDark)" stroke="#c8e2e8" stroke-width="3"/><rect x="154" y="232" width="40" height="76" rx="4" fill="#d7a15e" fill-opacity=".65"/><path d="M174 179V210" stroke="#b6d7df" stroke-width="5"/>
+                  <text x="380" y="62" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">КОНТРОЛЬ КАЧЕСТВА</text>
+                  <text x="380" y="390" fill="#9ab0b5" font-size="12" text-anchor="middle">ПРОВЕРКА ПЕРЕД ПЕРЕДАЧЕЙ НА РОЗЛИВ</text>
+                </g>
+
+                <!-- Beverage stage 5: filling -->
+                <g class="tour-art-layer drink-layer drink-layer-4">
+                  <path d="M110 337H650" stroke="#7d9da7" stroke-width="12" stroke-linecap="round"/><path d="M140 337H620" stroke="#1a2a32" stroke-width="5" stroke-dasharray="14 12"/>
+                  <g transform="translate(170 140)"><path d="M20 42H74V58L87 77V174Q87 187 74 187H20Q7 187 7 174V77L20 58Z" fill="#85c4d5" fill-opacity=".16" stroke="#d5f1f7" stroke-width="3"/><rect x="31" y="17" width="32" height="31" rx="5" fill="url(#metal)" stroke="#d5f1f7" stroke-width="2"/><rect x="27" y="7" width="40" height="13" rx="4" fill="#263b45" stroke="#b6d7df"/><path d="M14 113H80" stroke="#fff" stroke-opacity=".45" stroke-width="4"/></g>
+                  <g transform="translate(325 140)"><path d="M20 42H74V58L87 77V174Q87 187 74 187H20Q7 187 7 174V77L20 58Z" fill="#d79a4a" fill-opacity=".22" stroke="#f4d9b1" stroke-width="3"/><rect x="31" y="17" width="32" height="31" rx="5" fill="url(#metal)" stroke="#f4d9b1" stroke-width="2"/><rect x="27" y="7" width="40" height="13" rx="4" fill="#263b45" stroke="#f4d9b1"/><path d="M14 113H80" stroke="#f5c47e" stroke-opacity=".65" stroke-width="4"/></g>
+                  <g transform="translate(480 137)"><rect x="0" y="49" width="112" height="136" rx="24" fill="url(#metalDark)" stroke="#d5e9ed" stroke-width="4"/><rect x="38" y="24" width="36" height="29" rx="7" fill="url(#metal)" stroke="#d5e9ed" stroke-width="3"/><path d="M12 103H100" stroke="#d9a15c" stroke-width="5"/><path d="M16 68H96" stroke="#fff" stroke-opacity=".24" stroke-width="4"/></g>
+                  <path d="M205 98V125M360 98V125M536 91V121" stroke="#e8b36e" stroke-width="5" stroke-linecap="round"/><path d="M194 117L205 130L216 117M349 117L360 130L371 117M525 113L536 126L547 113" fill="none" stroke="#e8b36e" stroke-width="4"/>
+                  <text x="380" y="46" fill="#f4d7b1" font-size="14" text-anchor="middle" letter-spacing="3">РОЗЛИВ И УПАКОВКА</text>
+                  <text x="380" y="390" fill="#9ab0b5" font-size="12" text-anchor="middle">ГОТОВЫЙ НАПИТОК · ВЫБРАННЫЙ ФОРМАТ</text>
+                </g>
+                <!-- Lightweight code-only motion overlays. These are illustrative animations, not footage of the facility. -->
+                <g class="tour-motion-layer tour-motion-pet-0" aria-hidden="true">
+                  <g class="falling-pellets">
+                    <circle class="tour-pellet pellet-a" cx="350" cy="105" r="5"/><circle class="tour-pellet pellet-b" cx="385" cy="112" r="6"/><circle class="tour-pellet pellet-c" cx="416" cy="100" r="4.5"/>
+                    <circle class="tour-pellet pellet-d" cx="365" cy="128" r="4"/><circle class="tour-pellet pellet-e" cx="404" cy="137" r="5"/>
+                  </g>
+                  <path class="motion-flow-line" d="M380 185V280" fill="none" stroke="#8bd8ec" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 12"/>
+                  <circle class="flow-pulse" cx="380" cy="252" r="12" fill="#9ee8f7" opacity=".8"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-pet-1" aria-hidden="true">
+                  <path class="screw-motion" d="M215 242L250 218L285 266L320 218L355 266L390 218L425 266L460 218L495 266L530 218" fill="none" stroke="#d9f6ff" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 19"/>
+                  <g class="heater-pulse"><ellipse cx="247" cy="242" rx="23" ry="75"/><ellipse cx="331" cy="242" rx="23" ry="75"/><ellipse cx="415" cy="242" rx="23" ry="75"/><ellipse cx="499" cy="242" rx="23" ry="75"/></g>
+                  <path class="melt-flow" d="M540 242H631" fill="none" stroke="#ffc477" stroke-width="8" stroke-linecap="round" stroke-dasharray="5 17"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-pet-2" aria-hidden="true">
+                  <rect class="mold-light" x="190" y="163" width="123" height="165" rx="7"/>
+                  <rect class="mold-light" x="447" y="163" width="123" height="165" rx="7"/>
+                  <path class="injection-pulse" d="M320 218H440" fill="none" stroke="#ffd18b" stroke-width="6" stroke-linecap="round" stroke-dasharray="8 18"/>
+                  <path class="mold-scan" d="M380 175V305" fill="none" stroke="#aeefff" stroke-width="2" stroke-dasharray="5 8"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-pet-3" aria-hidden="true">
+                  <path class="conveyor-motion" d="M105 365H655" fill="none" stroke="#9ddceb" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 18"/>
+                  <path class="bottle-shine" d="M335 200V315" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+                  <g class="floating-spec"><rect x="493" y="134" width="104" height="44" rx="8" fill="#152b34" stroke="#8ab9c8"/><text x="545" y="152" fill="#d4eef4" text-anchor="middle" font-size="9" letter-spacing="1.3">PET / PRODUCT</text><text x="545" y="166" fill="#e9bd82" text-anchor="middle" font-size="9">ГОТОВО</text></g>
+                </g>
+                <g class="tour-motion-layer tour-motion-drinks-0" aria-hidden="true">
+                  <g fill="#f6cf91" stroke="#fff0d6" stroke-width="1.2"><circle class="drink-bubble bubble-a" cx="432" cy="253" r="5"/><circle class="drink-bubble bubble-b" cx="465" cy="274" r="4"/><circle class="drink-bubble bubble-c" cx="488" cy="247" r="6"/><circle class="drink-bubble bubble-d" cx="450" cy="289" r="3.5"/></g>
+                  <path class="ingredient-flow" d="M164 302Q190 250 224 250" fill="none" stroke="#e8b46e" stroke-width="4" stroke-dasharray="4 12"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-drinks-1" aria-hidden="true">
+                  <g fill="#ffdcaa"><circle class="ferment-bubble fb-a" cx="338" cy="300" r="4"/><circle class="ferment-bubble fb-b" cx="374" cy="318" r="5"/><circle class="ferment-bubble fb-c" cx="413" cy="287" r="3.5"/><circle class="ferment-bubble fb-d" cx="395" cy="265" r="4"/><circle class="ferment-bubble fb-e" cx="353" cy="278" r="3"/></g>
+                  <path class="liquid-wave" d="M307 232Q340 217 380 232T455 232" fill="none" stroke="#ffcf8b" stroke-width="3"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-drinks-2" aria-hidden="true">
+                  <path class="mix-flow" d="M315 207H450V178H492" fill="none" stroke="#ffe0ae" stroke-width="4" stroke-dasharray="7 13"/>
+                  <g class="mix-sparkles" fill="#ffe0ae"><circle cx="345" cy="192" r="4"/><circle cx="382" cy="192" r="4"/><circle cx="420" cy="192" r="4"/></g>
+                </g>
+                <g class="tour-motion-layer tour-motion-drinks-3" aria-hidden="true">
+                  <path class="quality-scan" d="M285 130H475" stroke="#aee8d3" stroke-width="3" stroke-linecap="round"/>
+                  <circle class="quality-ping" cx="542" cy="170" r="24" fill="none" stroke="#a7e0c9" stroke-width="2"/>
+                </g>
+                <g class="tour-motion-layer tour-motion-drinks-4" aria-hidden="true">
+                  <path class="filling-stream" d="M205 126V190M360 126V190M536 126V190" stroke="#f0bf7d" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 10"/>
+                  <g class="conveyor-bottle-track" transform="translate(92 0)"><g class="conveyor-bottle conveyor-bottle-one"><path d="M0 0H22V10L29 20V66Q29 72 22 72H0Q-7 72-7 66V20L0 10Z" fill="#c58a43" fill-opacity=".3" stroke="#ffe0b4" stroke-width="2"/><rect x="4" y="-10" width="14" height="12" rx="3" fill="#b8d9e1"/></g></g>
+                  <g class="conveyor-bottle-track" transform="translate(92 0)"><g class="conveyor-bottle conveyor-bottle-two"><path d="M0 0H22V10L29 20V66Q29 72 22 72H0Q-7 72-7 66V20L0 10Z" fill="#85c4d5" fill-opacity=".22" stroke="#d9f6fc" stroke-width="2"/><rect x="4" y="-10" width="14" height="12" rx="3" fill="#b8d9e1"/></g></g>
+                </g>
+              </svg>
+              <div class="tour-art-footer"><span data-tour-art-caption>Полимерное сырьё и гранулы</span><span class="art-coordinates">NR / PROCESS VIEW</span></div>
+            </div>
+            <div class="tour-stepper-wrap"><div class="tour-stepper-line"><span data-tour-progress-line></span></div><div class="tour-stepper" data-tour-step-list aria-label="Этапы маршрута"></div></div>
+            <div class="tour-controls"><button class="tour-control-button" type="button" data-tour-prev disabled>← <span>Назад</span></button><button class="tour-control-button tour-control-play" type="button" data-tour-autoplay aria-pressed="false">▶ <span>Показать цикл</span></button><span data-tour-helper>Выберите этап или продолжайте по порядку</span><button class="tour-control-button tour-control-next" type="button" data-tour-next><span>Следующий этап</span> →</button></div>
+          </div>
+
+          <aside class="tour-info-panel">
+            <div class="tour-info-top"><span data-tour-kicker>ПЭТ И ПОЛИМЕРЫ / ЭТАП 01</span><span class="tour-status-mark">●</span></div>
+            <div class="tour-big-number" data-tour-big-number>01</div>
+            <span class="eyebrow" data-tour-eyebrow>ВХОДНОЙ МАТЕРИАЛ</span>
+            <h2 data-tour-title>Сырьё и гранулы</h2>
+            <p class="tour-description" data-tour-description>Производственная цепочка начинается с выбора полимерного сырья. В зависимости от назначения изделия используют соответствующий материал и согласованные требования к его свойствам.</p>
+            <div class="tour-fact-box"><span>ПОЧЕМУ ЭТО ВАЖНО</span><p data-tour-fact>Свойства исходного материала влияют на технологию обработки и характеристики будущего изделия.</p></div>
+            <div class="tour-info-tags" data-tour-tags><span>ПЭТ</span><span>Гранулы</span><span>Сырьё</span></div>
+            <a class="tour-info-link" data-tour-link href="catalog.html#granules">Посмотреть продукцию <b>↗</b></a>
+          </aside>
+        </div>
+        <div class="tour-bottom-bar"><div><span class="tour-bottom-emblem">NR</span><p><b data-tour-bottom-title>Материал определяет возможности изделия.</b><small data-tour-bottom-note>Точные характеристики зависят от спецификации и назначения.</small></p></div><a class="tour-bottom-cta" href="contacts.html#request">Обсудить задачу <span>↗</span></a></div>
+      </div>
+      <p class="tour-disclaimer"><b>Важно:</b> это схематичная ознакомительная визуализация типовых технологических этапов, а не видеозапись цеха и не техническая инструкция. Конкретное оборудование, состав сырья, операции, режимы и контрольные параметры для каждой позиции подтверждаются производством и документацией на продукт.</p>
+    </div>
+  </section>
+
+  <section class="tour-bridge-section">
+    <div class="container tour-bridge-grid">
+      <article class="tour-bridge-card reveal"><div class="bridge-symbol bridge-symbol-blue">◈</div><span class="eyebrow">ПЭТ и полимеры</span><h2>Нужна упаковка или сырьё?</h2><p>Изучите ассортимент ПЭТ-преформ, тары, гранул и полимерных изделий. Для запроса можно приложить чертёж или описать параметры.</p><a class="text-link" href="catalog.html">Перейти в каталог <span>→</span></a></article>
+      <article class="tour-bridge-card bridge-card-warm reveal delay-1"><div class="bridge-symbol bridge-symbol-gold">♧</div><span class="eyebrow">Напитки «Русский Квас»</span><h2>Выбираете формат напитка?</h2><p>Посмотрите линейку кваса, лимонада, морса и «РусКолы», а также варианты ПЭТ-тары и термокеги.</p><a class="text-link" href="kvass.html">Открыть презентацию напитков <span>→</span></a></article>
+    </div>
+  </section>
+
+  <section class="tour-final-cta"><div class="container tour-final-inner"><div><span class="eyebrow">Следующий шаг</span><h2>Есть задача для производства?</h2><p>Расскажите, какой продукт или формат вам нужен. Менеджер поможет уточнить исходные параметры и дальнейшие действия.</p></div><a class="btn" href="contacts.html#request">Связаться с компанией <span>↗</span></a></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-grid">
+  <div class="footer-about"><a class="brand" href="index.html"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a><p>ПЭТ-преформы, полимерная упаковка, гранулы и напитки «Русский Квас».</p></div>
+  <div class="footer-col"><h4>Навигация</h4><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="tour.html">Экскурсия</a><a href="kvass.html">Русский Квас</a></div>
+  <div class="footer-col"><h4>Сотрудничество</h4><a href="contacts.html#request">Оставить заявку</a><a href="contacts.html">Контакты и реквизиты</a></div>
+  <div class="footer-col"><h4>Связаться</h4><a href="tel:+79921476101">+7 (992) 147-61-01</a><p>р. п. Городище, ул. Фрунзе, 1</p><p>Пн–Пт · 08:00–17:00</p></div>
+</div><div class="footer-bottom"><span>© <span data-current-year>2026</span> ООО «Новая Реальность»</span><span>Схематичная презентация типовых технологических этапов.</span></div></div></footer>
+
+<button class="chat-launch" aria-label="Открыть ИИ-консультанта" aria-expanded="false">✦</button>
+<aside class="chat-panel" aria-label="ИИ-консультант" aria-hidden="true">
+  <div class="chat-head"><div class="chat-head-title"><strong>ИИ-консультант</strong><span><i></i><b data-chat-status>Проверяем подключение…</b></span></div><button class="chat-close" aria-label="Закрыть чат">×</button></div>
+  <div class="chat-messages" data-chat-log aria-live="polite" aria-relevant="additions"><div class="chat-message bot-message">Здравствуйте! 👋 Я консультант компании «Новая Реальность». Могу помочь с вопросами о ПЭТ-продукции и «Русском Квасе».</div></div>
+  <div class="chat-quick-answers"><button type="button" data-chat-question="Какие изделия выпускает компания?">Ассортимент</button><button type="button" data-chat-question="Расскажите о ПЭТ-преформах и бутылках.">ПЭТ-продукция</button><button type="button" data-chat-question="Какие напитки есть в линейке Русский Квас?">Напитки</button><button type="button" data-chat-question="Расскажите про термокегу 20 литров и условия хранения.">Термокега</button></div>
+  <form class="chat-input-form" data-chat-form><input type="text" data-chat-input maxlength="1000" placeholder="Напишите ваш вопрос…" aria-label="Ваш вопрос" required><button type="submit" aria-label="Отправить сообщение">➤</button></form>
+  <p class="chat-disclaimer">Цены, наличие, сроки и технические параметры подтверждает менеджер компании.</p>
+</aside>
+<script src="main.js"></script>
+<script src="business-center.js"></script>
+</body>
+</html>

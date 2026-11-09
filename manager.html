@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Демонстрационный рабочий кабинет менеджера ООО «Новая Реальность».">
+  <title>Рабочее место менеджера — Новая Реальность</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
+  <link rel="stylesheet" href="manager.css">
+</head>
+<body>
+  <div class="manager-shell">
+    <aside class="manager-sidebar" id="managerSidebar">
+      <a class="manager-brand" href="index.html">
+        <img src="assets/brand-emblem.svg" alt="" width="42" height="42">
+        <span>НОВАЯ РЕАЛЬНОСТЬ<small>РАБОЧЕЕ МЕСТО</small></span>
+      </a>
+      <div class="sidebar-caption">РАБОЧАЯ ОБЛАСТЬ</div>
+      <nav class="manager-nav" aria-label="Навигация кабинета">
+        <button class="manager-nav-item active" type="button" data-view="overview"><span>◫</span> Обзор</button>
+        <button class="manager-nav-item" type="button" data-view="requests"><span>▤</span> Все заявки <b id="sidebarRequestCount">3</b></button>
+        <button class="manager-nav-item" type="button" data-view="samples"><span>◇</span> Запросы образцов</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="manager-user"><div class="manager-avatar">М</div><div><b>Менеджер</b><small>Демонстрационный доступ</small></div></div>
+        <a class="back-to-site" href="index.html">← Вернуться на сайт</a>
+      </div>
+    </aside>
+
+    <main class="manager-main">
+      <header class="manager-topbar">
+        <div class="topbar-title"><button class="mobile-sidebar-toggle" id="sidebarToggle" aria-label="Открыть меню">☰</button><div><span class="topbar-kicker">NR · BUSINESS CENTER</span><h1 id="pageTitle">Обзор заявок</h1></div></div>
+        <div class="topbar-actions">
+          <span class="demo-chip"><i></i> ДЕМО-РЕЖИМ</span>
+          <label class="import-button" for="draftImport">＋ Импортировать черновик</label>
+          <input id="draftImport" type="file" accept=".txt,text/plain" hidden>
+        </div>
+      </header>
+
+      <section class="demo-notice" role="note">
+        <div class="notice-icon">!</div>
+        <div><b>Это демонстрационный кабинет, не подключённый к реальным заявкам.</b><p>Показываются тестовые записи. Можно импортировать TXT-черновик из Центра заказов и проверить работу интерфейса. Данные этого сеанса не передаются на сервер и исчезнут после перезагрузки страницы.</p></div>
+      </section>
+
+      <section class="manager-view active" id="overviewView" data-panel="overview">
+        <div class="welcome-row"><div><p class="eyebrow"><span id="weekdayLabel">РАБОЧАЯ ПАНЕЛЬ</span> · РАБОЧАЯ ПАНЕЛЬ</p><h2>Добро пожаловать!</h2><p>Здесь собраны обращения клиентов и задачи менеджера.</p></div><div class="today-card"><span>СЕГОДНЯ</span><strong id="todayLabel">—</strong><small>Время вашего устройства</small></div></div>
+        <div class="metric-grid">
+          <article class="metric-card"><div class="metric-top"><span>Все заявки</span><i class="metric-icon blue">▤</i></div><strong id="metricTotal">3</strong><small>В текущем списке</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Новые</span><i class="metric-icon amber">✦</i></div><strong id="metricNew">1</strong><small>Требуют первого ответа</small></article>
+          <article class="metric-card"><div class="metric-top"><span>В работе</span><i class="metric-icon green">↗</i></div><strong id="metricProgress">1</strong><small>На рассмотрении</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Образцы</span><i class="metric-icon violet">◇</i></div><strong id="metricSamples">1</strong><small>Запросы образцов</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <section class="manager-card recent-card"><div class="card-heading"><div><span class="section-kicker">ТРЕБУЮТ ВНИМАНИЯ</span><h3>Последние заявки</h3></div><button class="text-action" data-go-view="requests">Все заявки ↗</button></div><div class="recent-list" id="recentList"></div></section>
+          <section class="manager-card quick-card"><span class="section-kicker">БЫСТРЫЕ ДЕЙСТВИЯ</span><h3>Работа с обращениями</h3><button class="quick-action" type="button" id="quickImport"><span class="quick-action-icon">↥</span><span><b>Импортировать черновик</b><small>TXT-файл из Центра заказов</small></span><strong>→</strong></button><button class="quick-action" type="button" data-go-view="requests"><span class="quick-action-icon">▤</span><span><b>Открыть все заявки</b><small>Поиск, фильтрация и статусы</small></span><strong>→</strong></button><a class="quick-action" href="business-center.html"><span class="quick-action-icon">＋</span><span><b>Посмотреть путь клиента</b><small>Открыть публичный Центр заказов</small></span><strong>↗</strong></a><div class="workflow-tip"><b>Подсказка</b><p>После подключения серверной части новые обращения будут появляться здесь автоматически. Сейчас их можно добавить вручную из TXT-черновика.</p></div></section>
+        </div>
+        <section class="manager-card workflow-card"><div class="card-heading"><div><span class="section-kicker">ПРОЦЕСС ОБРАБОТКИ</span><h3>Путь заявки</h3></div><span class="workflow-label">Рабочий сценарий</span></div><div class="workflow-steps"><div><i>01</i><b>Новая</b><small>Поступило обращение</small></div><span>→</span><div><i>02</i><b>В работе</b><small>Менеджер уточняет детали</small></div><span>→</span><div><i>03</i><b>Согласование</b><small>Цена, образец, условия</small></div><span>→</span><div><i>04</i><b>Завершена</b><small>Результат зафиксирован</small></div></div></section>
+      </section>
+
+      <section class="manager-view" id="requestsView" data-panel="requests">
+        <div class="list-toolbar"><div><p class="eyebrow">КЛИЕНТСКИЕ ОБРАЩЕНИЯ</p><h2>Все заявки</h2><p>Поиск, фильтрация и изменение статуса обращения.</p></div><button class="export-button" id="exportCsv">↓ Выгрузить CSV</button></div>
+        <div class="filter-bar"><label class="search-box"><span>⌕</span><input id="requestSearch" type="search" placeholder="Поиск по номеру, компании, телефону…"></label><select id="statusFilter" aria-label="Фильтр по статусу"><option value="all">Все статусы</option><option value="new">Новая</option><option value="progress">В работе</option><option value="waiting">Ожидает клиента</option><option value="done">Завершена</option><option value="cancelled">Отменена</option></select><select id="typeFilter" aria-label="Фильтр по типу"><option value="all">Все типы</option><option value="quote">Расчёт стоимости</option><option value="sample">Образец</option><option value="custom">Изготовление</option></select></div>
+        <div class="request-table-wrap"><table class="request-table"><thead><tr><th>ЗАЯВКА</th><th>КЛИЕНТ</th><th>ТИП ЗАПРОСА</th><th>ДАТА</th><th>СТАТУС</th><th></th></tr></thead><tbody id="requestTableBody"></tbody></table><div class="no-results" id="noResults" hidden>По выбранным условиям заявок не найдено.</div></div>
+      </section>
+
+      <section class="manager-view" id="samplesView" data-panel="samples">
+        <div class="list-toolbar"><div><p class="eyebrow">ОБРАЗЦЫ ПРОДУКЦИИ</p><h2>Запросы образцов</h2><p>Обращения, в которых клиент запросил тестовый образец.</p></div></div>
+        <div class="sample-summary" id="sampleSummary"></div>
+      </section>
+      <footer class="manager-footer"><span>© 2026 ООО «Новая Реальность»</span><span>NR Manager · интерфейс-прототип</span></footer>
+    </main>
+  </div>
+
+  <div class="detail-backdrop" id="detailBackdrop" hidden></div>
+  <aside class="request-detail" id="requestDetail" aria-label="Карточка заявки" aria-hidden="true">
+    <div class="detail-head"><div><span class="section-kicker">КАРТОЧКА ОБРАЩЕНИЯ</span><h2 id="detailNumber">Заявка</h2></div><button class="detail-close" id="detailClose" aria-label="Закрыть">×</button></div>
+    <div id="detailContent" class="detail-content"></div>
+  </aside>
+  <div class="manager-toast" id="managerToast" role="status" aria-live="polite"></div>
+  <script src="manager.js"></script>
+</body>
+</html>

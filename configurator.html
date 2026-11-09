@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Интерактивный предварительный подбор ПЭТ-упаковки и изделий ООО «Новая Реальность». Соберите пожелания и отправьте запрос менеджеру.">
+  <title>Конструктор ПЭТ-упаковки — Новая Реальность</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="index.html"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a>
+  <nav class="main-nav" aria-label="Основная навигация"><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a class="active" href="configurator.html">Конструктор</a><a href="tour.html">Экскурсия</a><a href="index.html#thermoplast">Технология</a><a href="index.html#production">Производство</a><a href="kvass.html">Русский Квас</a><a href="contacts.html">Контакты</a><a class="employee-portal-nav" href="manager.html"><span aria-hidden="true">◈</span> Для сотрудников <b aria-hidden="true">↗</b></a></nav>
+  <div class="header-actions"><a class="employee-shortcut" href="manager.html" aria-label="Открыть демонстрационный кабинет для сотрудников">Для сотрудников <span aria-hidden="true">↗</span></a><a class="header-phone" href="tel:+79921476101">+7 (992) 147-61-01</a><a class="btn" href="#configurator">Подобрать изделие ↗</a><button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false">☰</button></div>
+</div></header>
+<main>
+  <section class="page-hero configurator-hero"><div class="container">
+    <div class="breadcrumbs"><a href="index.html">Главная</a>　/　<a href="catalog.html">Каталог</a>　/　Конструктор</div>
+    <span class="eyebrow">Инструмент для предварительного подбора</span>
+    <h1>Соберите идею<br><em>своей упаковки.</em></h1>
+    <p>Выберите тип изделия и основные пожелания. Предпросмотр меняется прямо на экране, а готовая спецификация поможет менеджеру быстрее понять вашу задачу.</p>
+    <div class="config-hero-points"><span>Интерактивный предпросмотр</span><span>Подбор под задачу</span><span>Запрос без обязательств</span></div>
+  </div></section>
+
+  <section class="configurator-section" id="configurator" data-configurator>
+    <div class="container">
+      <div class="configurator-heading"><div><span class="eyebrow">Конструктор упаковки</span><h2>Настройте предварительный вариант</h2><p>Это эскиз для обсуждения, а не инженерный чертёж и не подтверждение серийного выпуска.</p></div><div class="config-step-badge"><span>01</span><b>Ваше техническое пожелание</b></div></div>
+      <div class="configurator-workspace">
+        <div class="config-preview-panel">
+          <div class="config-preview-top"><span class="preview-kicker"><i></i> LIVE · ПРЕДПРОСМОТР</span><span class="preview-code">NR / PET–01</span></div>
+          <div class="config-stage" data-config-stage>
+            <div class="config-stage-orbit orbit-one"></div><div class="config-stage-orbit orbit-two"></div>
+            <div class="config-stage-glow"></div>
+            <canvas class="config-3d-canvas" data-config-3d-canvas aria-label="Интерактивная трёхмерная модель упаковки. Перетаскивайте для вращения."></canvas>
+            <svg class="config-product-svg" data-config-svg viewBox="0 0 420 560" role="img" aria-label="Предварительная визуализация ПЭТ-бутылки">
+              <defs>
+                <linearGradient id="configBody" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#6fa5b7" stop-opacity=".24"/><stop offset=".18" stop-color="#e9fbff" stop-opacity=".74"/><stop offset=".43" stop-color="#ffffff" stop-opacity=".92"/><stop offset=".68" stop-color="#a4d1df" stop-opacity=".37"/><stop offset="1" stop-color="#5b94a8" stop-opacity=".24"/></linearGradient>
+                <linearGradient id="configEdge" x1="0" x2="1"><stop offset="0" stop-color="#5c91a1" stop-opacity=".12"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".84"/><stop offset="1" stop-color="#56889b" stop-opacity=".18"/></linearGradient>
+                <linearGradient id="configCap" x1="0" x2="1"><stop offset="0" stop-color="#18242c"/><stop offset=".45" stop-color="#536671"/><stop offset="1" stop-color="#10191f"/></linearGradient>
+                <linearGradient id="configLiquid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#70b9d0" stop-opacity=".35"/><stop offset="1" stop-color="#287d9d" stop-opacity=".08"/></linearGradient>
+                <filter id="configShadow" x="-50%" y="-30%" width="200%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
+              </defs>
+              <ellipse cx="210" cy="492" rx="93" ry="17" fill="#061117" opacity=".45" filter="url(#configShadow)" class="config-svg-shadow"/>
+              <g class="config-product-model" data-config-model>
+                <path class="config-body" data-config-body d="M178 154 L178 116 Q178 106 190 106 L230 106 Q242 106 242 116 L242 154 L263 184 Q273 198 273 218 L273 451 Q273 470 254 470 L166 470 Q147 470 147 451 L147 218 Q147 198 157 184 Z" fill="url(#configBody)" stroke="url(#configEdge)" stroke-width="3"/>
+                <path class="config-neck" data-config-neck d="M178 119 L178 88 Q178 82 187 82 L233 82 Q242 82 242 88 L242 119" fill="url(#configBody)" stroke="#d9f0f6" stroke-opacity=".7" stroke-width="2"/>
+                <g class="config-cap-group" data-config-cap-group><rect x="174" y="54" width="72" height="31" rx="7" fill="url(#configCap)"/><path d="M180 58V81 M188 57V82 M196 57V82 M204 57V82 M212 57V82 M220 57V82 M228 57V82 M236 57V82" stroke="#ffffff" stroke-opacity=".2" stroke-width="2"/></g>
+                <path d="M165 210 Q210 194 255 210 M153 423 Q210 435 267 423" fill="none" stroke="#ffffff" stroke-opacity=".42" stroke-width="3"/>
+                <path d="M163 220 Q155 330 164 420" fill="none" stroke="#ffffff" stroke-opacity=".52" stroke-width="7" stroke-linecap="round"/>
+                <path d="M251 221 Q259 328 250 418" fill="none" stroke="#4d8799" stroke-opacity=".2" stroke-width="5" stroke-linecap="round"/>
+                <path class="config-liquid" data-config-liquid d="M151 355 Q210 342 269 355 L269 451 Q269 468 251 468 L169 468 Q151 468 151 451Z" fill="url(#configLiquid)" opacity="0"/>
+                <path class="config-highlight" d="M183 197 Q177 270 184 383" fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="8" stroke-linecap="round"/>
+                <g class="config-base-rings" opacity=".7"><path d="M151 437 Q210 451 269 437 M151 448 Q210 462 269 448" fill="none" stroke="#ffffff" stroke-opacity=".45" stroke-width="2"/></g>
+              </g>
+              <g class="config-dimension-lines" fill="none" stroke="#a8d9e7" stroke-opacity=".58" stroke-width="1.4"><path d="M86 110H130 M86 110V470 M86 470H130"/><path d="M291 470H330 M330 470V430" stroke-dasharray="3 5"/></g>
+              <g fill="#c6e6ef" font-family="Manrope,Arial,sans-serif" font-size="10" letter-spacing="2"><text x="44" y="291" transform="rotate(-90 44 291)">ЭСКИЗ · НЕ В МАСШТАБЕ</text><text x="292" y="491">NR / PET</text></g>
+            </svg>
+            <div class="config-stage-spark spark-a"></div><div class="config-stage-spark spark-b"></div><div class="config-stage-spark spark-c"></div>
+            <div class="config-preview-label"><strong data-config-preview-name>ПЭТ-бутылка</strong><span data-config-preview-subtitle>Прозрачное исполнение · винтовая крышка</span></div>
+          </div>
+          <div class="config-viewer-toolbar" data-config-viewer-controls>
+            <div class="config-viewer-topline"><span><i></i> ИНТЕРАКТИВНАЯ 3D-МОДЕЛЬ</span><small data-config-view-status>Загрузка 3D-сцены…</small></div>
+            <div class="config-viewer-presets" role="group" aria-label="Ракурс модели">
+              <button type="button" class="active" data-config-view="front" aria-pressed="true">Спереди</button>
+              <button type="button" data-config-view="three-quarter" aria-pressed="false">3/4</button>
+              <button type="button" data-config-view="side" aria-pressed="false">Сбоку</button>
+              <button type="button" data-config-view="back" aria-pressed="false">Сзади</button>
+              <button type="button" data-config-view="neck" aria-pressed="false">Горловина</button>
+              <button type="button" data-config-view="base" aria-pressed="false">Дно</button>
+            </div>
+            <div class="config-viewer-tools">
+              <label class="config-view-range"><span>Поворот</span><input type="range" min="0" max="360" value="0" step="1" data-config-rotation aria-label="Угол поворота модели"><b data-config-angle>0°</b></label>
+              <div class="config-zoom-tools" role="group" aria-label="Масштаб модели"><button type="button" data-config-zoom-out aria-label="Уменьшить">−</button><input type="range" min="70" max="155" value="100" step="1" data-config-zoom aria-label="Масштаб модели"><button type="button" data-config-zoom-in aria-label="Увеличить">+</button><button type="button" class="zoom-reset" data-config-reset title="Сбросить вид" aria-label="Сбросить вид">↺</button></div>
+            </div>
+            <div class="config-viewer-hint"><span>↔ Перетаскивайте модель мышью или пальцем</span><span>Колесо мыши — масштаб</span></div>
+          </div>
+          <div class="config-preview-footer"><span><i></i> Форма меняется при выборе параметров</span><span>01 / 04</span></div>
+        </div>
+
+        <div class="config-controls-panel">
+          <div class="config-control-block"><div class="config-control-heading"><span>01</span><div><h3>Тип изделия</h3><p>Выберите основу для обсуждения</p></div></div>
+            <div class="config-type-grid" role="group" aria-label="Тип изделия">
+              <button type="button" class="config-type-card active" data-config-type="bottle" aria-pressed="true"><span class="type-mini mini-bottle"></span><b>Бутылка</b><small>ПЭТ-тара</small></button>
+              <button type="button" class="config-type-card" data-config-type="preform" aria-pressed="false"><span class="type-mini mini-preform"></span><b>Преформа</b><small>Заготовка</small></button>
+              <button type="button" class="config-type-card" data-config-type="container" aria-pressed="false"><span class="type-mini mini-container"></span><b>Ёмкость</b><small>Банка / флакон</small></button>
+            </div>
+          </div>
+          <div class="config-control-block"><div class="config-control-heading"><span>02</span><div><h3>Основные пожелания</h3><p>Можно выбрать предварительные параметры</p></div></div>
+            <div class="config-form-grid">
+              <label class="config-field"><span data-config-volume-label>Целевой объём готового изделия</span><select data-config-volume><option value="0,5 л">0,5 л</option><option value="1 л">1 л</option><option value="1,5 л" selected>1,5 л</option><option value="2 л">2 л</option><option value="3 л">3 л</option><option value="другой объём">Другой / уточнить</option></select></label>
+              <label class="config-field"><span>Назначение</span><select data-config-use><option value="Для напитков">Для напитков</option><option value="Для пищевой продукции">Для пищевой продукции</option><option value="Для бытовой / химической продукции">Для бытовой / химической продукции</option><option value="Другое / требуется консультация">Другое / требуется консультация</option></select></label>
+              <label class="config-field"><span>Предпочтение по сырью</span><select data-config-material><option value="Обсудить с менеджером" selected>Обсудить с менеджером</option><option value="Первичное сырьё">Первичное сырьё</option><option value="Вторичное сырьё">Вторичное сырьё</option></select></label>
+              <label class="config-field"><span>Тип укупорки</span><select data-config-closure><option value="Винтовая крышка">Винтовая крышка</option><option value="Без крышки / преформа">Без крышки / преформа</option><option value="Уточнить по линии розлива">Уточнить по линии розлива</option></select></label>
+            </div>
+            <p class="config-field-note">Совместимость сырья с содержимым, возможность вторичного материала для пищевого применения, геометрия, горловина и укупорка проверяются специалистами отдельно.</p>
+          </div>
+          <div class="config-control-block"><div class="config-control-heading"><span>03</span><div><h3>Внешний вид</h3><p>Цвет модели для наглядности</p></div></div>
+            <div class="config-color-row" role="group" aria-label="Цвет изделия">
+              <button type="button" class="config-color active" data-config-color="clear" aria-label="Прозрачный" aria-pressed="true"><i></i><span>Прозрачный</span></button>
+              <button type="button" class="config-color" data-config-color="blue" aria-label="Голубой" aria-pressed="false"><i></i><span>Голубой</span></button>
+              <button type="button" class="config-color" data-config-color="amber" aria-label="Янтарный" aria-pressed="false"><i></i><span>Янтарный</span></button>
+              <button type="button" class="config-color" data-config-color="green" aria-label="Зелёный" aria-pressed="false"><i></i><span>Зелёный</span></button>
+            </div>
+            <label class="config-field config-cap-field"><span>Цвет крышки в эскизе</span><select data-config-cap><option value="black">Графитовая</option><option value="white">Белая</option><option value="blue">Голубая</option></select></label>
+          </div>
+          <div class="config-control-block config-quantity-block"><div class="config-control-heading"><span>04</span><div><h3>Объём заказа</h3><p>Укажите ориентировочную потребность</p></div></div>
+            <label class="config-field"><span>Количество, шт. (ориентировочно)</span><input type="number" min="1" step="1" value="5000" data-config-quantity inputmode="numeric"></label>
+          </div>
+          <div class="config-submit-area"><div class="config-summary"><span>Ваш предварительный запрос</span><strong data-config-summary>ПЭТ-бутылка · 1,5 л · прозрачная · 5 000 шт.</strong></div><div class="config-actions"><button type="button" class="btn btn-dark" data-config-send>Передать пожелания менеджеру ↗</button><button type="button" class="btn btn-business-secondary" data-config-add-to-cart>Добавить в центр заказов +</button><button type="button" class="config-copy-button" data-config-copy>Копировать параметры</button></div><p class="config-note" data-config-status>Переход откроет форму контактов с уже заполненным описанием. Форма пока демонстрационная и не отправляет заявку.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="config-bottom-section"><div class="container config-bottom-grid"><div><span class="eyebrow">От эскиза к спецификации</span><h2>Идея — это начало диалога.</h2><p>После получения запроса специалисты уточнят назначение изделия, параметры, технологическую реализуемость, сырьё и требования к упаковке. Итоговые характеристики фиксируются в согласованной спецификации.</p><a class="btn" href="contacts.html#request">Связаться с компанией ↗</a></div><div class="config-bottom-card"><span class="config-bottom-icon">⌁</span><h3>Есть чертёж или образец?</h3><p>Вместо выбора из готовых вариантов можно отправить эскиз, чертёж или описание требуемого изделия.</p><a href="contacts.html?product=custom#request">Обсудить индивидуальное изделие →</a></div></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-about"><a class="brand" href="index.html"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a><p>ПЭТ-преформы, полимерная упаковка, гранулы и «Русский Квас».</p></div><div class="footer-col"><h4>Навигация</h4><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="tour.html">Экскурсия</a><a href="kvass.html">Русский Квас</a></div><div class="footer-col"><h4>Конструктор</h4><a href="#configurator">Подобрать упаковку</a><a href="contacts.html#request">Оставить запрос</a></div><div class="footer-col"><h4>Связаться</h4><a href="tel:+79921476101">+7 (992) 147-61-01</a><p>р. п. Городище, ул. Фрунзе, 1</p><p>Пн–Пт · 08:00–17:00</p></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> ООО «Новая Реальность»</span><span>Эскизные параметры подтверждаются менеджером.</span></div></div></footer>
+<button class="chat-launch" aria-label="Открыть ИИ-консультанта" aria-expanded="false">✦</button>
+<aside class="chat-panel" aria-label="ИИ-консультант" aria-hidden="true"><div class="chat-head"><div class="chat-head-title"><strong>ИИ-консультант</strong><span><i></i><b data-chat-status>Проверяем подключение…</b></span></div><button class="chat-close" aria-label="Закрыть чат">×</button></div><div class="chat-messages" data-chat-log aria-live="polite"><div class="chat-message bot-message">Здравствуйте! 👋 Я консультант компании «Новая Реальность». Чем могу помочь?</div></div><div class="chat-quick-answers"><button type="button" data-chat-question="Какие изделия выпускает компания?">Ассортимент</button><button type="button" data-chat-question="Расскажите о ПЭТ-преформах и бутылках.">ПЭТ-продукция</button><button type="button" data-chat-question="Как связаться с менеджером и запросить цену?">Заказать / связаться</button></div><form class="chat-input-form" data-chat-form><input type="text" data-chat-input maxlength="1000" placeholder="Напишите ваш вопрос…" aria-label="Ваш вопрос" required><button type="submit" aria-label="Отправить сообщение">➤</button></form><p class="chat-disclaimer">ИИ-консультант отвечает по информации о компании. Цены, наличие, сроки и технические параметры подтвердит менеджер.</p></aside>
+<script src="main.js"></script>
+<script src="business-center.js"></script>
+<script type="module" src="configurator-3d.js"></script>
+</body>
+</html>

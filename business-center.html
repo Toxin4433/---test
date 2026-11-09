@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Центр заказов ООО «Новая Реальность»: соберите список продукции, запросите образцы и подготовьте техническое задание.">
+  <title>Центр заказов — Новая Реальность</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Новая Реальность — главная"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="configurator.html">Конструктор</a><a href="tour.html">Экскурсия</a><a href="index.html#thermoplast">Технология</a><a href="kvass.html">Русский Квас</a><a class="active business-center-nav" data-business-cart-link href="business-center.html"><span>Центр заказов</span><b data-business-cart-count hidden>0</b></a><a href="contacts.html">Контакты</a>
+    <a class="employee-portal-nav" href="manager.html"><span aria-hidden="true">◈</span> Для сотрудников <b aria-hidden="true">↗</b></a></nav>
+    <div class="header-actions"><a class="employee-shortcut" href="manager.html" aria-label="Открыть демонстрационный кабинет для сотрудников">Для сотрудников <span aria-hidden="true">↗</span></a><a class="header-phone" href="tel:+79921476101">+7 (992) 147-61-01</a><button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false">☰</button></div>
+  </div>
+</header>
+<main data-business-center>
+  <section class="page-hero business-hero">
+    <div class="container">
+      <div class="breadcrumbs"><a href="index.html">Главная</a>　/　Центр заказов</div>
+      <span class="eyebrow">NR · BUSINESS CENTER</span>
+      <h1>От выбора изделия<br><em>до готового запроса.</em></h1>
+      <p>Соберите продукцию из каталога, добавьте конфигурацию из 3D-конструктора, запросите образец или подготовьте техническое задание для менеджера.</p>
+      <div class="business-hero-points"><span>01 · Каталог</span><span>02 · Конфигурация</span><span>03 · Запрос менеджеру</span></div>
+    </div>
+  </section>
+
+  <section class="business-center-section">
+    <div class="container">
+      <div class="business-center-heading">
+        <div><span class="eyebrow">Ваш список</span><h2>Центр заказов</h2><p>Добавляйте позиции из каталога и конструктора. Количество и детали можно уточнить здесь.</p></div>
+        <div class="business-cart-counter"><span>Всего в запросе</span><strong data-business-total-count>0 шт.</strong><small data-business-line-count>0 позиций</small></div>
+      </div>
+      <div class="business-center-layout">
+        <div class="business-cart-panel">
+          <div class="business-panel-top"><div><span class="business-panel-kicker">ВАШ ВЫБОР</span><h3>Продукция и конфигурации</h3></div><button type="button" class="business-clear-button" data-business-clear-cart>Очистить список</button></div>
+          <div class="business-cart-list" data-business-cart-list aria-live="polite"></div>
+          <div class="business-cart-panel-bottom"><a href="catalog.html" class="business-text-link">← Продолжить выбор в каталоге</a><a href="configurator.html" class="business-text-link">Открыть 3D-конструктор ↗</a></div>
+        </div>
+        <aside class="business-help-panel">
+          <div class="business-help-icon">✦</div><span class="business-panel-kicker">КАК ЭТО РАБОТАЕТ</span><h3>Один запрос — несколько позиций</h3>
+          <ol><li><b>Выберите</b><span>добавьте нужные изделия из каталога или конфигуратора.</span></li><li><b>Уточните</b><span>количество, задачу и желаемый вариант сотрудничества.</span></li><li><b>Подготовьте</b><span>черновик запроса и передайте его менеджеру.</span></li></ol>
+          <div class="business-help-contact"><small>Нужно обсудить заказ напрямую?</small><a href="tel:+79921476101">+7 (992) 147-61-01</a><span>Пн–Пт · 08:00–17:00</span></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="business-request-section" id="request">
+    <div class="container business-request-layout">
+      <div class="business-request-copy"><span class="eyebrow">Следующий шаг</span><h2>Подготовьте запрос<br><em>для менеджера.</em></h2><p>Укажите контакты и задачу. На текущем этапе сайт сформирует файл-черновик на вашем устройстве. Реальная отправка на почту или в CRM будет подключена отдельно.</p>
+        <div class="business-trust-points"><span>✓ Вы контролируете выбранные позиции</span><span>✓ Можно приложить чертёж или фото к черновику</span><span>✓ Технические параметры подтверждаются специалистом</span></div>
+      </div>
+      <div class="business-request-card">
+        <div class="business-request-card-head"><span class="business-panel-kicker">ФОРМА ЗАПРОСА</span><h3>Контактные данные</h3><p>Поля со звёздочкой обязательны для создания черновика.</p></div>
+        <form data-business-request-form>
+          <div class="business-mode-picker"><label><input type="radio" name="requestMode" value="quote" checked data-business-request-mode><span><b>Расчёт</b><small>Цена и условия</small></span></label><label><input type="radio" name="requestMode" value="sample" data-business-request-mode><span><b>Образец</b><small>Запросить образец</small></span></label><label><input type="radio" name="requestMode" value="custom" data-business-request-mode><span><b>Изготовление</b><small>По ТЗ / чертежу</small></span></label></div>
+          <div class="business-form-grid">
+            <label class="business-field"><span>Ваше имя *</span><input name="name" autocomplete="name" required maxlength="100" placeholder="Как к вам обращаться"></label>
+            <label class="business-field"><span>Компания</span><input name="company" autocomplete="organization" maxlength="160" placeholder="Название организации"></label>
+            <label class="business-field"><span>Телефон *</span><input name="phone" type="tel" autocomplete="tel" required maxlength="40" placeholder="+7 …"></label>
+            <label class="business-field"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="160" placeholder="name@company.ru"></label>
+            <label class="business-field"><span>Город / регион</span><input name="city" maxlength="120" placeholder="Город доставки"></label>
+            <label class="business-field"><span>ИНН (необязательно)</span><input name="inn" inputmode="numeric" maxlength="12" placeholder="ИНН организации"></label>
+            <label class="business-field business-field-wide"><span>Комментарий к запросу</span><textarea name="comment" rows="4" maxlength="1800" placeholder="Опишите задачу, область применения, желаемые сроки или другие требования…"></textarea></label>
+            <div class="business-field business-field-wide business-file-field"><span>Чертёж, фото или техническое задание</span><label class="business-file-drop"><input type="file" data-business-files multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.dwg,.dxf,.doc,.docx,.xls,.xlsx"><span class="business-file-icon">↥</span><b>Выбрать файлы</b><small>PDF, изображения, DWG/DXF, DOC/XLS · до 3 файлов по 15 МБ</small></label><div class="business-file-list" data-business-file-list>Файлы не выбраны</div><p class="business-file-warning">Важно: файлы пока не загружаются на сервер. Сайт добавит их названия в черновик; сами файлы нужно будет передать менеджеру отдельно.</p></div>
+          </div>
+          <button class="btn btn-dark business-submit-button" type="submit">Сформировать файл запроса ↓</button>
+          <div class="business-status" data-business-status role="status" aria-live="polite">Заполните контакты и нажмите кнопку. Сайт скачает текстовый черновик — заявка автоматически не отправляется.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="business-next-section"><div class="container business-next-grid"><div><span class="eyebrow">Продолжить работу</span><h2>Нужна помощь с выбором?</h2><p>Откройте каталог, изучите виртуальную экскурсию или задайте вопрос ИИ-консультанту.</p></div><div class="business-next-links"><a href="catalog.html">Каталог продукции <b>↗</b></a><a href="tour.html">Виртуальная экскурсия <b>↗</b></a><a href="configurator.html">3D-конструктор упаковки <b>↗</b></a><a href="contacts.html">Контакты компании <b>↗</b></a></div></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-grid"><div class="footer-about"><a class="brand" href="index.html"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a><p>ПЭТ-преформы, полимерная упаковка, гранулы и «Русский Квас».</p></div><div class="footer-col"><h4>Навигация</h4><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="configurator.html">Конструктор</a><a href="tour.html">Экскурсия</a></div><div class="footer-col"><h4>Заказы</h4><a href="#request">Сформировать запрос</a><a href="contacts.html">Контакты</a></div><div class="footer-col"><h4>Связаться</h4><a href="tel:+79921476101">+7 (992) 147-61-01</a><p>Пн–Пт · 08:00–17:00</p></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> ООО «Новая Реальность»</span><span>Запросы на сайте пока формируются как локальные черновики.</span></div></div></footer>
+<button class="chat-launch" aria-label="Открыть ИИ-консультанта" aria-expanded="false">✦</button>
+<aside class="chat-panel" aria-label="ИИ-консультант" aria-hidden="true"><div class="chat-head"><div class="chat-head-title"><strong>ИИ-консультант</strong><span><i></i><b data-chat-status>Проверяем подключение…</b></span></div><button class="chat-close" aria-label="Закрыть чат">×</button></div><div class="chat-messages" data-chat-log aria-live="polite"><div class="chat-message bot-message">Здравствуйте! 👋 Я консультант компании «Новая Реальность». Чем могу помочь?</div></div><div class="chat-quick-answers"><button type="button" data-chat-question="Помогите подобрать упаковку под мою задачу.">Подобрать упаковку</button><button type="button" data-chat-question="Как запросить образец продукции?">Запрос образца</button><button type="button" data-chat-question="Как оформить оптовый запрос?">Оформить запрос</button></div><form class="chat-input-form" data-chat-form><input type="text" data-chat-input maxlength="1000" placeholder="Напишите ваш вопрос…" aria-label="Ваш вопрос" required><button type="submit" aria-label="Отправить сообщение">➤</button></form><p class="chat-disclaimer">ИИ-консультант отвечает по информации о компании. Цены, наличие, сроки и технические параметры подтвердит менеджер.</p></aside>
+<script src="main.js"></script>
+<script src="business-center.js"></script>
+</body>
+</html>
