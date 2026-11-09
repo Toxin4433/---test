@@ -6,8 +6,11 @@
   node_bundler = "esbuild"
 
 
-# Не предлагать демо-кабинет поисковым системам. Это НЕ механизм контроля доступа.
+# Закрываем рабочие кабинеты от индексации. Реальная защита выполняется авторизацией и RLS в Supabase.
 [[headers]]
   for = "/manager.html"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[build.environment]
+  NODE_VERSION = "22"

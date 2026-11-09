@@ -4,16 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <meta name="description" content="Демонстрационный рабочий кабинет менеджера ООО «Новая Реальность».">
+  <meta name="description" content="Защищённый рабочий кабинет сотрудников ООО «Новая Реальность».">
   <title>Рабочее место менеджера — Новая Реальность</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
   <link rel="stylesheet" href="manager.css">
+  <link rel="stylesheet" href="crm.css">
 </head>
 <body>
-  <div class="manager-shell">
+  <main class="manager-auth-gate" id="managerAuthGate">
+    <form class="manager-auth-card" id="staffLoginForm">
+      <a class="manager-brand manager-auth-brand" href="index.html"><img src="assets/brand-emblem.svg" alt="" width="42" height="42"><span>НОВАЯ РЕАЛЬНОСТЬ<small>ЗАЩИЩЁННЫЙ ВХОД СОТРУДНИКА</small></span></a>
+      <span class="section-kicker">NR · STAFF PORTAL</span>
+      <h1>Вход в рабочий кабинет</h1>
+      <p>Доступ только для сотрудников, созданных администратором.</p>
+      <label>Email<input name="email" type="email" autocomplete="username" required maxlength="160" placeholder="employee@company.ru"></label>
+      <label>Пароль<input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128" placeholder="Пароль сотрудника"></label>
+      <button type="submit" class="staff-login-button">Войти</button>
+      <div class="staff-login-status" id="staffLoginStatus" role="status" aria-live="polite"></div>
+      <a class="back-to-public" href="index.html">← Вернуться на сайт</a>
+    </form>
+  </main>
+  <div class="manager-shell" id="managerApp" hidden>
     <aside class="manager-sidebar" id="managerSidebar">
       <a class="manager-brand" href="index.html">
         <img src="assets/brand-emblem.svg" alt="" width="42" height="42">
@@ -22,11 +36,13 @@
       <div class="sidebar-caption">РАБОЧАЯ ОБЛАСТЬ</div>
       <nav class="manager-nav" aria-label="Навигация кабинета">
         <button class="manager-nav-item active" type="button" data-view="overview"><span>◫</span> Обзор</button>
-        <button class="manager-nav-item" type="button" data-view="requests"><span>▤</span> Все заявки <b id="sidebarRequestCount">3</b></button>
+        <button class="manager-nav-item" type="button" data-view="requests"><span>▤</span> Все заявки <b id="sidebarRequestCount">0</b></button>
         <button class="manager-nav-item" type="button" data-view="samples"><span>◇</span> Запросы образцов</button>
+        <button class="manager-nav-item" type="button" data-view="employees" data-admin-only hidden><span>♙</span> Сотрудники</button>
       </nav>
       <div class="sidebar-bottom">
-        <div class="manager-user"><div class="manager-avatar">М</div><div><b>Менеджер</b><small>Демонстрационный доступ</small></div></div>
+        <div class="manager-user"><div class="manager-avatar" id="staffAvatar">С</div><div><b id="staffName">Сотрудник</b><small id="staffRoleLabel">Проверка доступа</small></div></div>
+        <button type="button" class="staff-logout-button" id="staffLogout">Выйти из кабинета</button>
         <a class="back-to-site" href="index.html">← Вернуться на сайт</a>
       </div>
     </aside>
@@ -35,28 +51,27 @@
       <header class="manager-topbar">
         <div class="topbar-title"><button class="mobile-sidebar-toggle" id="sidebarToggle" aria-label="Открыть меню">☰</button><div><span class="topbar-kicker">NR · BUSINESS CENTER</span><h1 id="pageTitle">Обзор заявок</h1></div></div>
         <div class="topbar-actions">
-          <span class="demo-chip"><i></i> ДЕМО-РЕЖИМ</span>
-          <label class="import-button" for="draftImport">＋ Импортировать черновик</label>
-          <input id="draftImport" type="file" accept=".txt,text/plain" hidden>
+          <span class="demo-chip" id="staffRoleChip"><i></i> ЗАЩИЩЁННЫЙ ДОСТУП</span>
+          <button type="button" class="export-button" id="refreshOrders">↻ Обновить</button>
         </div>
       </header>
 
-      <section class="demo-notice" role="note">
-        <div class="notice-icon">!</div>
-        <div><b>Это демонстрационный кабинет, не подключённый к реальным заявкам.</b><p>Показываются тестовые записи. Можно импортировать TXT-черновик из Центра заказов и проверить работу интерфейса. Данные этого сеанса не передаются на сервер и исчезнут после перезагрузки страницы.</p></div>
+      <section class="demo-notice crm-connected-notice" id="crmConnectedNotice" role="status">
+        <div class="notice-icon">✓</div>
+        <div><b>Подключено к отдельной тестовой CRM-базе.</b><p id="accessScopeText">Доступ к заявкам проверяется сервером. Менеджер видит только назначенные ему обращения, администратор — все.</p></div>
       </section>
 
       <section class="manager-view active" id="overviewView" data-panel="overview">
         <div class="welcome-row"><div><p class="eyebrow"><span id="weekdayLabel">РАБОЧАЯ ПАНЕЛЬ</span> · РАБОЧАЯ ПАНЕЛЬ</p><h2>Добро пожаловать!</h2><p>Здесь собраны обращения клиентов и задачи менеджера.</p></div><div class="today-card"><span>СЕГОДНЯ</span><strong id="todayLabel">—</strong><small>Время вашего устройства</small></div></div>
         <div class="metric-grid">
-          <article class="metric-card"><div class="metric-top"><span>Все заявки</span><i class="metric-icon blue">▤</i></div><strong id="metricTotal">3</strong><small>В текущем списке</small></article>
-          <article class="metric-card"><div class="metric-top"><span>Новые</span><i class="metric-icon amber">✦</i></div><strong id="metricNew">1</strong><small>Требуют первого ответа</small></article>
-          <article class="metric-card"><div class="metric-top"><span>В работе</span><i class="metric-icon green">↗</i></div><strong id="metricProgress">1</strong><small>На рассмотрении</small></article>
-          <article class="metric-card"><div class="metric-top"><span>Образцы</span><i class="metric-icon violet">◇</i></div><strong id="metricSamples">1</strong><small>Запросы образцов</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Все заявки</span><i class="metric-icon blue">▤</i></div><strong id="metricTotal">0</strong><small>В текущем списке</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Новые</span><i class="metric-icon amber">✦</i></div><strong id="metricNew">0</strong><small>Требуют первого ответа</small></article>
+          <article class="metric-card"><div class="metric-top"><span>В работе</span><i class="metric-icon green">↗</i></div><strong id="metricProgress">0</strong><small>На рассмотрении</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Образцы</span><i class="metric-icon violet">◇</i></div><strong id="metricSamples">0</strong><small>Запросы образцов</small></article>
         </div>
         <div class="dashboard-grid">
           <section class="manager-card recent-card"><div class="card-heading"><div><span class="section-kicker">ТРЕБУЮТ ВНИМАНИЯ</span><h3>Последние заявки</h3></div><button class="text-action" data-go-view="requests">Все заявки ↗</button></div><div class="recent-list" id="recentList"></div></section>
-          <section class="manager-card quick-card"><span class="section-kicker">БЫСТРЫЕ ДЕЙСТВИЯ</span><h3>Работа с обращениями</h3><button class="quick-action" type="button" id="quickImport"><span class="quick-action-icon">↥</span><span><b>Импортировать черновик</b><small>TXT-файл из Центра заказов</small></span><strong>→</strong></button><button class="quick-action" type="button" data-go-view="requests"><span class="quick-action-icon">▤</span><span><b>Открыть все заявки</b><small>Поиск, фильтрация и статусы</small></span><strong>→</strong></button><a class="quick-action" href="business-center.html"><span class="quick-action-icon">＋</span><span><b>Посмотреть путь клиента</b><small>Открыть публичный Центр заказов</small></span><strong>↗</strong></a><div class="workflow-tip"><b>Подсказка</b><p>После подключения серверной части новые обращения будут появляться здесь автоматически. Сейчас их можно добавить вручную из TXT-черновика.</p></div></section>
+          <section class="manager-card quick-card"><span class="section-kicker">БЫСТРЫЕ ДЕЙСТВИЯ</span><h3>Работа с обращениями</h3><button class="quick-action" type="button" id="quickRefresh"><span class="quick-action-icon">↻</span><span><b>Обновить заявки</b><small>Загрузить актуальные данные CRM</small></span><strong>→</strong></button><button class="quick-action" type="button" data-go-view="requests"><span class="quick-action-icon">▤</span><span><b>Открыть все заявки</b><small>Поиск, фильтрация и статусы</small></span><strong>→</strong></button><a class="quick-action" href="business-center.html"><span class="quick-action-icon">＋</span><span><b>Посмотреть путь клиента</b><small>Открыть публичный Центр заказов</small></span><strong>↗</strong></a><div class="workflow-tip"><b>Подсказка</b><p>Новые заявки из Центра заказов сохраняются в базе. Администратор назначает обращения ответственным менеджерам.</p></div></section>
         </div>
         <section class="manager-card workflow-card"><div class="card-heading"><div><span class="section-kicker">ПРОЦЕСС ОБРАБОТКИ</span><h3>Путь заявки</h3></div><span class="workflow-label">Рабочий сценарий</span></div><div class="workflow-steps"><div><i>01</i><b>Новая</b><small>Поступило обращение</small></div><span>→</span><div><i>02</i><b>В работе</b><small>Менеджер уточняет детали</small></div><span>→</span><div><i>03</i><b>Согласование</b><small>Цена, образец, условия</small></div><span>→</span><div><i>04</i><b>Завершена</b><small>Результат зафиксирован</small></div></div></section>
       </section>
@@ -71,7 +86,21 @@
         <div class="list-toolbar"><div><p class="eyebrow">ОБРАЗЦЫ ПРОДУКЦИИ</p><h2>Запросы образцов</h2><p>Обращения, в которых клиент запросил тестовый образец.</p></div></div>
         <div class="sample-summary" id="sampleSummary"></div>
       </section>
-      <footer class="manager-footer"><span>© 2026 ООО «Новая Реальность»</span><span>NR Manager · интерфейс-прототип</span></footer>
+      <section class="manager-view" id="employeesView" data-panel="employees" data-admin-only hidden>
+        <div class="list-toolbar"><div><p class="eyebrow">УПРАВЛЕНИЕ ДОСТУПОМ</p><h2>Сотрудники</h2><p>Создание менеджеров и временное отключение доступа.</p></div></div>
+        <div class="manager-card employee-create-card">
+          <div><span class="section-kicker">НОВАЯ УЧЁТНАЯ ЗАПИСЬ</span><h3>Добавить менеджера</h3><p>Укажите рабочий email и временный пароль длиной не менее 12 символов. Передайте пароль сотруднику безопасным способом.</p></div>
+          <form id="createManagerForm" class="employee-create-form">
+            <label>Имя сотрудника<input name="full_name" required maxlength="100" placeholder="Имя и фамилия"></label>
+            <label>Рабочий email<input name="email" type="email" required maxlength="160" placeholder="manager@company.ru"></label>
+            <label>Начальный пароль<input name="password" type="password" required minlength="12" maxlength="128" placeholder="Не менее 12 символов"></label>
+            <button type="submit" class="detail-save">Создать менеджера</button>
+            <div id="createManagerStatus" class="employee-form-status" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+        <div class="manager-card employee-list-card"><div class="card-heading"><div><span class="section-kicker">УЧЁТНЫЕ ЗАПИСИ</span><h3>Администраторы и менеджеры</h3></div><button type="button" class="text-action" id="refreshEmployees">Обновить список</button></div><div id="employeeList" class="employee-list"><p class="no-results">Загрузка списка сотрудников…</p></div></div>
+      </section>
+      <footer class="manager-footer"><span>© 2026 ООО «Новая Реальность»</span><span>NR Manager · защищённый доступ</span></footer>
     </main>
   </div>
 
@@ -81,6 +110,6 @@
     <div id="detailContent" class="detail-content"></div>
   </aside>
   <div class="manager-toast" id="managerToast" role="status" aria-live="polite"></div>
-  <script src="manager.js"></script>
+  <script type="module" src="manager.js"></script>
 </body>
 </html>

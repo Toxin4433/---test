@@ -1,53 +1,121 @@
+import { getSupabase, getActiveUserProfile, callAdminApi } from './auth.js';
+
 (() => {
   'use strict';
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const STATUS = {
-    new: {label: 'Новая', cls: 'status-new'},
-    progress: {label: 'В работе', cls: 'status-progress'},
-    waiting: {label: 'Ожидает клиента', cls: 'status-waiting'},
-    done: {label: 'Завершена', cls: 'status-done'},
-    cancelled: {label: 'Отменена', cls: 'status-cancelled'}
+    new: { label: 'Новая', cls: 'status-new' },
+    progress: { label: 'В работе', cls: 'status-progress' },
+    waiting: { label: 'Ожидает клиента', cls: 'status-waiting' },
+    done: { label: 'Завершена', cls: 'status-done' },
+    cancelled: { label: 'Отменена', cls: 'status-cancelled' }
   };
-  const TYPE = {quote: 'Расчёт стоимости', sample: 'Запрос образца', custom: 'Изготовление'};
-  const demoDate = days => { const date = new Date(); date.setDate(date.getDate() - days); return date.toISOString(); };
-  const requests = [
-    {id:'NR-DEMO-001', date:demoDate(0), type:'quote', status:'new', priority:'high', client:{name:'Александр — тестовая запись',company:'ООО «ВолгаФуд» (демо)',phone:'+7 (000) 000-00-01',email:'volgafood@example.invalid',city:'Волгоград',inn:'0000000000'}, items:[{name:'ПЭТ-преформа',quantity:10000,unit:'шт.',description:'Тестовая позиция каталога',details:'Параметры для демонстрации'}], comment:'Демо-запись. Требуется уточнить горловину и массу преформы.', note:'Связаться после согласования технических параметров.', demo:true},
-    {id:'NR-DEMO-002', date:demoDate(1), type:'sample', status:'progress', priority:'normal', client:{name:'Мария — тестовая запись',company:'ИП «Тест» (демо)',phone:'+7 (000) 000-00-02',email:'client@example.invalid',city:'Камышин',inn:'не указан'}, items:[{name:'ПЭТ-бутылка',quantity:3,unit:'образца',description:'Запрос образцов из тестового набора',details:'Прозрачная, предварительный вариант'}], comment:'Демо-запись для проверки процесса запроса образцов.', note:'Подготовить тестовую подборку.', demo:true},
-    {id:'NR-DEMO-003', date:demoDate(3), type:'custom', status:'waiting', priority:'normal', client:{name:'Игорь — тестовая запись',company:'ООО «Пищевые решения» (демо)',phone:'+7 (000) 000-00-03',email:'buyer@example.invalid',city:'Саратов',inn:'не указан'}, items:[{name:'Индивидуальная полимерная ёмкость',quantity:5000,unit:'шт.',description:'Условный пример индивидуального заказа',details:'Эскиз и характеристики требуют подтверждения'}], comment:'Демо-запись. Клиент должен направить чертёж.', note:'Ожидаем техническое задание.', demo:true}
-  ];
+  const TYPE = { quote: 'Расчёт стоимости', sample: 'Запрос образца', custom: 'Изготовление' };
+  const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  const fmtDate = value => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }).format(date); };
+  const fmtDateTime = value => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(date); };
+
+  let supabase = null;
+  let currentProfile = null;
+  let requests = [];
+  let employees = [];
   let activeRequestId = null;
   let toastTimer = null;
-  const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-  const fmtDate = value => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'short',year:'numeric'}).format(date); };
-  const fmtDateTime = value => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(date); };
-  const toast = message => { const node = $('#managerToast'); if (!node) return; node.textContent = message; node.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => node.classList.remove('show'), 2600); };
-  const statusBadge = status => { const item = STATUS[status] || STATUS.new; return `<span class="status-pill ${item.cls}">${item.label}</span>`; };
-  const total = () => requests.length;
-  const setMetrics = () => {
-    $('#metricTotal').textContent = total();
-    $('#metricNew').textContent = requests.filter(r => r.status === 'new').length;
-    $('#metricProgress').textContent = requests.filter(r => r.status === 'progress').length;
-    $('#metricSamples').textContent = requests.filter(r => r.type === 'sample').length;
-    $('#sidebarRequestCount').textContent = total();
+
+  const toast = message => {
+    const node = $('#managerToast');
+    if (!node) return;
+    node.textContent = message;
+    node.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => node.classList.remove('show'), 3000);
   };
-  const visibleRequests = (mode = 'all') => {
+  const setLoginStatus = (message, isError = false) => {
+    const node = $('#staffLoginStatus');
+    node.textContent = message;
+    node.classList.toggle('is-error', isError);
+  };
+  const statusBadge = status => { const item = STATUS[status] || STATUS.new; return `<span class="status-pill ${item.cls}">${item.label}</span>`; };
+
+  function switchView(view) {
+    if (view === 'employees' && currentProfile?.role !== 'admin') return;
+    $$('[data-panel]').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === view));
+    $$('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
+    $('#pageTitle').textContent = view === 'overview' ? 'Обзор заявок' : view === 'samples' ? 'Запросы образцов' : view === 'employees' ? 'Сотрудники' : 'Все заявки';
+    $('#managerSidebar').classList.remove('open');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (view === 'employees' && currentProfile?.role === 'admin') loadEmployees().catch(error => toast(error.message));
+  }
+
+  function visibleRequests(mode = 'all') {
     const q = ($('#requestSearch')?.value || '').trim().toLowerCase();
     const status = $('#statusFilter')?.value || 'all';
     const type = mode === 'samples' ? 'sample' : ($('#typeFilter')?.value || 'all');
     return requests.filter(request => {
       if (status !== 'all' && request.status !== status) return false;
       if (type !== 'all' && request.type !== type) return false;
-      const haystack = [request.id, request.client?.name, request.client?.company, request.client?.phone, request.client?.email, request.client?.city, ...request.items.map(i => i.name)].join(' ').toLowerCase();
+      const haystack = [request.code, request.client?.name, request.client?.company, request.client?.phone, request.client?.email, request.client?.city, ...request.items.map(item => item.name)].join(' ').toLowerCase();
       return !q || haystack.includes(q);
-    }).sort((a,b) => new Date(b.date)-new Date(a.date));
-  };
-  const openDetail = id => {
-    const request = requests.find(item => item.id === id); if (!request) return;
+    }).sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+
+  function renderMetrics() {
+    $('#metricTotal').textContent = String(requests.length);
+    $('#metricNew').textContent = String(requests.filter(item => item.status === 'new').length);
+    $('#metricProgress').textContent = String(requests.filter(item => item.status === 'progress').length);
+    $('#metricSamples').textContent = String(requests.filter(item => item.type === 'sample').length);
+    $('#sidebarRequestCount').textContent = String(requests.length);
+  }
+
+  function renderRecent() {
+    const recent = [...requests].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4);
+    $('#recentList').innerHTML = recent.map(request => `<article class="recent-row" tabindex="0" role="button" data-open-request="${safe(request.id)}">
+      <div><span class="recent-title">${safe(request.client.company || request.client.name || 'Без названия')}</span><span class="recent-sub">${safe(request.code)} · ${safe(TYPE[request.type] || 'Запрос')}</span></div>
+      <div class="recent-right"><span class="recent-date">${fmtDate(request.date)}</span>${statusBadge(request.status)}</div>
+    </article>`).join('') || '<p class="no-results">В вашей рабочей области пока нет заявок.</p>';
+  }
+
+  function renderTable() {
+    const list = visibleRequests();
+    $('#requestTableBody').innerHTML = list.map(request => `<tr data-open-request="${safe(request.id)}">
+      <td><span class="request-code">${safe(request.code)}</span>${request.priority === 'high' ? '<span class="client-sub">Высокий приоритет</span>' : ''}</td>
+      <td><span class="client-name">${safe(request.client.company || request.client.name || 'Не указан')}</span><span class="client-sub">${safe(request.client.name || '')}</span></td>
+      <td><span class="type-tag">${safe(TYPE[request.type] || 'Запрос')}</span></td>
+      <td><span class="table-date">${fmtDate(request.date)}</span></td>
+      <td>${statusBadge(request.status)}</td>
+      <td><button class="row-open" type="button" data-open-request="${safe(request.id)}">Открыть →</button></td>
+    </tr>`).join('');
+    $('#noResults').hidden = list.length > 0;
+  }
+
+  function renderSamples() {
+    const list = requests.filter(request => request.type === 'sample').sort((a, b) => new Date(b.date) - new Date(a.date));
+    $('#sampleSummary').innerHTML = list.map(request => `<article class="sample-card" tabindex="0" data-open-request="${safe(request.id)}">
+      <span class="section-kicker">${safe(request.code)} · ${fmtDate(request.date)}</span>
+      <h3>${safe(request.items.map(item => item.name).join(', ') || 'Образцы продукции')}</h3>
+      <p>${safe(request.client.company || request.client.name || 'Клиент не указан')} · ${safe(STATUS[request.status]?.label || 'Новая')}</p>
+    </article>`).join('') || '<div class="manager-card">Пока нет запросов образцов в доступной вам области.</div>';
+  }
+
+  function render() { renderMetrics(); renderRecent(); renderTable(); renderSamples(); }
+
+  function closeDetail() {
+    $('#requestDetail').classList.remove('open');
+    $('#requestDetail').setAttribute('aria-hidden', 'true');
+    $('#detailBackdrop').hidden = true;
+    activeRequestId = null;
+  }
+
+  function openDetail(id) {
+    const request = requests.find(item => item.id === id);
+    if (!request) return;
     activeRequestId = id;
-    $('#detailNumber').textContent = request.id;
+    $('#detailNumber').textContent = request.code;
     const client = request.client || {};
-    const items = request.items || [];
+    const itemsMarkup = request.items.map(item => `<div class="detail-item"><b>${safe(item.name)} · ${safe(item.quantity || 1)} ${safe(item.unit || 'шт.')}</b><small>${safe(item.description || '')}${item.details ? `\n${safe(item.details)}` : ''}</small></div>`).join('') || '<p>Позиции не указаны</p>';
+    const attachmentMarkup = (request.attachments || []).map(file => `<div class="detail-pair"><span>Файл</span><b>${safe(file.name || 'Приложение')} · ${safe(Math.round((Number(file.size_bytes) || 0) / 1024))} КБ</b></div>`).join('') || '<p style="font-size:9px;color:#91a0a5">Нет приложений</p>';
+    const assignmentMarkup = currentProfile.role === 'admin' ? `<div class="detail-field" style="margin-top:12px"><label for="detailAssignee">Ответственный менеджер</label><select id="detailAssignee"><option value="">Не назначена</option>${employees.filter(person => person.role === 'manager' && person.is_active).map(person => `<option value="${safe(person.id)}" ${request.assigned_to === person.id ? 'selected' : ''}>${safe(person.full_name || person.email)}</option>`).join('')}</select></div>` : `<p style="font-size:8px;color:#758991;margin:10px 0 0">Заявка назначена вам. Переназначить её может только администратор.</p>`;
     $('#detailContent').innerHTML = `
       <div class="detail-block"><h3>КЛИЕНТ</h3>
         <div class="detail-pair"><span>Контакт</span><b>${safe(client.name || 'Не указан')}</b></div>
@@ -57,86 +125,251 @@
         <div class="detail-pair"><span>Город</span><b>${safe(client.city || 'Не указан')}</b></div>
         <div class="detail-pair"><span>ИНН</span><b>${safe(client.inn || 'Не указан')}</b></div>
       </div>
-      <div class="detail-block"><h3>СОСТАВ ЗАПРОСА</h3><div class="detail-items">${items.map(item=>`<div class="detail-item"><b>${safe(item.name)} · ${safe(item.quantity)} ${safe(item.unit || 'шт.')}</b><small>${safe(item.description || '')}${item.details ? `\n${safe(item.details)}` : ''}</small></div>`).join('') || '<p>Позиции не указаны</p>'}</div></div>
+      <div class="detail-block"><h3>СОСТАВ ЗАПРОСА</h3><div class="detail-items">${itemsMarkup}</div></div>
       <div class="detail-block"><h3>КОММЕНТАРИЙ КЛИЕНТА</h3><p style="font-size:10px;line-height:1.7;color:#607780;white-space:pre-wrap">${safe(request.comment || 'Не указан')}</p></div>
+      <div class="detail-block"><h3>ПРИЛОЖЕННЫЕ ФАЙЛЫ</h3>${attachmentMarkup}<p style="font-size:8px;color:#9b845f;line-height:1.5">В этой версии в CRM сохраняются только метаданные файлов, не сами документы.</p></div>
       <div class="detail-block"><h3>ОБРАБОТКА ЗАЯВКИ</h3>
         <div class="detail-controls">
-          <div class="detail-field"><label for="detailStatus">Статус</label><select id="detailStatus">${Object.entries(STATUS).map(([key,val])=>`<option value="${key}" ${request.status===key?'selected':''}>${val.label}</option>`).join('')}</select></div>
-          <div class="detail-field"><label for="detailPriority">Приоритет</label><select id="detailPriority"><option value="normal" ${request.priority!=='high'?'selected':''}>Обычный</option><option value="high" ${request.priority==='high'?'selected':''}>Высокий</option></select></div>
+          <div class="detail-field"><label for="detailStatus">Статус</label><select id="detailStatus">${Object.entries(STATUS).map(([key, value]) => `<option value="${key}" ${request.status === key ? 'selected' : ''}>${value.label}</option>`).join('')}</select></div>
+          <div class="detail-field"><label for="detailPriority">Приоритет</label><select id="detailPriority"><option value="normal" ${request.priority !== 'high' ? 'selected' : ''}>Обычный</option><option value="high" ${request.priority === 'high' ? 'selected' : ''}>Высокий</option></select></div>
         </div>
+        ${assignmentMarkup}
         <div class="detail-field" style="margin-top:12px"><label for="detailNote">Внутренняя заметка менеджера</label><textarea id="detailNote" placeholder="Например: перезвонить, уточнить параметры, подготовить образец…">${safe(request.note || '')}</textarea></div>
-        <button type="button" class="detail-save" id="saveRequestChanges">Сохранить изменения в этом сеансе</button>
-        <div class="detail-links">${client.phone && !request.demo ? `<a href="tel:${safe(client.phone.replace(/[^+\d]/g,''))}">Позвонить</a>` : ''}${client.email && !client.email.endsWith('.invalid') ? `<a href="mailto:${safe(client.email)}">Написать email</a>` : ''}</div>
-      </div>
-      ${request.demo ? '<p style="font-size:8px;color:#a28a6b;line-height:1.6">Это вымышленная демонстрационная запись. Не является обращением реального клиента.</p>' : '<p style="font-size:8px;color:#7d929b;line-height:1.6">Импортировано из TXT-черновика на этом устройстве. Данные не отправлены в CRM.</p>'}`;
-    $('#requestDetail').classList.add('open'); $('#requestDetail').setAttribute('aria-hidden','false'); $('#detailBackdrop').hidden = false;
-  };
-  const closeDetail = () => { $('#requestDetail').classList.remove('open'); $('#requestDetail').setAttribute('aria-hidden','true'); $('#detailBackdrop').hidden = true; activeRequestId = null; };
-  const renderRecent = () => {
-    const recent = [...requests].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,4);
-    $('#recentList').innerHTML = recent.map(r=>`<article class="recent-row" tabindex="0" role="button" data-open-request="${safe(r.id)}"><div><span class="recent-title">${safe(r.client?.company || r.client?.name || 'Без названия')}</span><span class="recent-sub">${safe(r.id)} · ${safe(TYPE[r.type] || 'Запрос')}</span></div><div class="recent-right"><span class="recent-date">${fmtDate(r.date)}</span>${statusBadge(r.status)}</div></article>`).join('') || '<p class="no-results">Заявок пока нет. Импортируйте TXT-черновик.</p>';
-  };
-  const renderTable = () => {
-    const list = visibleRequests();
-    $('#requestTableBody').innerHTML = list.map(r=>`<tr data-open-request="${safe(r.id)}"><td><span class="request-code">${safe(r.id)}</span>${r.priority==='high'?'<span class="client-sub">Высокий приоритет</span>':''}</td><td><span class="client-name">${safe(r.client?.company || r.client?.name || 'Не указан')}</span><span class="client-sub">${safe(r.client?.name || '')}</span></td><td><span class="type-tag">${safe(TYPE[r.type] || 'Запрос')}</span></td><td><span class="table-date">${fmtDate(r.date)}</span></td><td>${statusBadge(r.status)}</td><td><button class="row-open" type="button" data-open-request="${safe(r.id)}">Открыть →</button></td></tr>`).join('');
-    $('#noResults').hidden = list.length > 0;
-  };
-  const renderSamples = () => {
-    const list = requests.filter(r=>r.type==='sample').sort((a,b)=>new Date(b.date)-new Date(a.date));
-    $('#sampleSummary').innerHTML = list.map(r=>`<article class="sample-card" data-open-request="${safe(r.id)}"><span class="section-kicker">${safe(r.id)} · ${fmtDate(r.date)}</span><h3>${safe(r.items?.map(i=>i.name).join(', ') || 'Образцы продукции')}</h3><p>${safe(r.client?.company || r.client?.name || 'Клиент не указан')} · ${safe(STATUS[r.status]?.label || 'Новая')}</p></article>`).join('') || '<div class="manager-card">Пока нет запросов образцов. Импортируйте TXT-черновик из Центра заказов.</div>';
-  };
-  const render = () => { setMetrics(); renderRecent(); renderTable(); renderSamples(); };
-  const switchView = view => {
-    $$('[data-panel]').forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===view));
-    $$('[data-view]').forEach(button=>button.classList.toggle('active',button.dataset.view===view));
-    $('#pageTitle').textContent = view==='overview'?'Обзор заявок':view==='samples'?'Запросы образцов':'Все заявки';
-    $('#managerSidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
-  };
-  const parseDraft = text => {
-    if (text.length > 100000) throw new Error('Файл слишком большой для импорта.');
-    const lines = text.replace(/^\uFEFF/,'').split(/\r?\n/);
-    const get = label => { const line=lines.find(row=>row.toLowerCase().startsWith(label.toLowerCase()+':')); return line ? line.slice(label.length+1).trim() : ''; };
-    const getSection = title => { const start=lines.findIndex(row=>row.trim().toUpperCase()===title); if(start<0)return ''; const out=[]; for(let i=start+1;i<lines.length && !/^(КОММЕНТАРИЙ|ПРИЛОЖЕНИЯ|ВАЖНО|ФАЙЛЫ)/i.test(lines[i].trim());i++)out.push(lines[i]); return out.join('\n').trim(); };
-    const contact = {name:get('Имя'),company:get('Компания'),phone:get('Телефон'),email:get('Email'),city:get('Город / регион'),inn:get('ИНН')};
-    if (!contact.name && !contact.phone && !contact.company) throw new Error('Не удалось распознать контакты. Выберите TXT-черновик из Центра заказов.');
-    const typeRaw=get('Тип запроса');
-    const type=typeRaw.includes('образц')?'sample':typeRaw.includes('изготов')?'custom':'quote';
-    const itemLines=getSection('ПОЗИЦИИ ЗАПРОСА').split('\n'); const items=[]; let current=null;
-    itemLines.forEach(line=>{const title=line.match(/^\s*\d+\.\s*(.+)$/); if(title){current={name:title[1].trim(),quantity:1,unit:'шт.',description:'',details:''};items.push(current);return;} if(!current)return; let m=line.match(/^\s*Количество:\s*(.+)$/i);if(m){const q=m[1].trim().match(/^([\d\s.,]+)/);if(q)current.quantity=q[1].replace(/\s/g,'');current.unit=m[1].trim().replace(/^[-\d\s.,]+/,'').trim()||'шт.';return;}m=line.match(/^\s*Описание:\s*(.+)$/i);if(m){current.description=m[1].trim();return;}m=line.match(/^\s*Параметры:\s*(.+)$/i);if(m)current.details=m[1].trim();});
-    const commentIndex=lines.findIndex(row=>row.trim().toUpperCase()==='КОММЕНТАРИЙ'); const attachmentIndex=lines.findIndex(row=>row.trim().toUpperCase()==='ПРИЛОЖЕНИЯ');
-    const comment=commentIndex>=0?lines.slice(commentIndex+1,attachmentIndex>=0?attachmentIndex:lines.length).join('\n').trim():'';
-    const dateLine=get('Дата'); const parsedDate=dateLine?new Date(dateLine):new Date();
-    return {id:`NR-IMP-${Date.now().toString().slice(-7)}`,date:Number.isNaN(parsedDate.getTime())?new Date().toISOString():parsedDate.toISOString(),type,status:'new',priority:'normal',client:contact,items,comment,note:'',demo:false,imported:true};
-  };
-  const importFile = async file => {
-    if (!file) return;
-    if (!/\.txt$/i.test(file.name) || file.size > 100000) { toast('Нужен TXT-черновик размером до 100 КБ.'); return; }
-    try { const request=parseDraft(await file.text()); requests.unshift(request); render(); switchView('requests'); $('#requestSearch').value=request.id; renderTable(); openDetail(request.id); toast('Черновик импортирован в текущий сеанс.'); }
-    catch(error){toast(error.message || 'Не удалось прочитать файл.');}
-  };
-  const csvCell = value => `"${String(value ?? '').replace(/"/g,'""')}"`;
-  const exportCsv = () => {
-    const rows=[['Номер','Дата','Тип','Статус','Приоритет','Источник','Компания','Контакт','Телефон','Email','Город','Позиции','Комментарий']];
-    visibleRequests().forEach(r=>rows.push([r.id,fmtDateTime(r.date),TYPE[r.type],STATUS[r.status]?.label,r.priority==='high'?'Высокий':'Обычный',r.demo?'Демо-запись':'Импортированный черновик',r.client?.company,r.client?.name,r.client?.phone,r.client?.email,r.client?.city,(r.items||[]).map(i=>`${i.name} — ${i.quantity} ${i.unit}`).join('; '),r.comment]));
-    const blob=new Blob(['\uFEFF'+rows.map(row=>row.map(csvCell).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='nr-manager-requests.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('CSV-файл подготовлен на вашем устройстве.');
-  };
-  document.addEventListener('click',event=>{
-    const nav=event.target.closest('[data-view]');if(nav){switchView(nav.dataset.view);return;}
-    const go=event.target.closest('[data-go-view]');if(go){switchView(go.dataset.goView);return;}
-    const open=event.target.closest('[data-open-request]');if(open){openDetail(open.dataset.openRequest);return;}
-    if(event.target.id==='detailBackdrop'||event.target.id==='detailClose'){closeDetail();return;}
-    if(event.target.id==='saveRequestChanges'){
-      const request=requests.find(r=>r.id===activeRequestId);if(!request)return;
-      request.status=$('#detailStatus').value;request.priority=$('#detailPriority').value;request.note=$('#detailNote').value.trim();render();openDetail(request.id);toast('Изменения обновлены в текущем сеансе.');
+        <button type="button" class="detail-save" id="saveRequestChanges">Сохранить изменения в CRM</button>
+        <div class="detail-links">${client.phone ? `<a href="tel:${safe(client.phone.replace(/[^+\d]/g, ''))}">Позвонить</a>` : ''}${client.email ? `<a href="mailto:${safe(client.email)}">Написать email</a>` : ''}</div>
+      </div>`;
+    $('#requestDetail').classList.add('open');
+    $('#requestDetail').setAttribute('aria-hidden', 'false');
+    $('#detailBackdrop').hidden = false;
+  }
+
+  async function loadOrders() {
+    const { data, error } = await supabase.rpc('get_staff_orders');
+    if (error) throw error;
+    requests = (data || []).map(row => ({
+      id: row.id,
+      code: row.order_number,
+      date: row.created_at,
+      type: row.type,
+      status: row.status,
+      priority: row.priority,
+      client: { name: row.customer_name, company: row.company, phone: row.phone, email: row.email, city: row.city, inn: row.inn },
+      items: Array.isArray(row.items) ? row.items : [],
+      comment: row.comment || '',
+      attachments: Array.isArray(row.attachments) ? row.attachments : [],
+      note: row.manager_note || '',
+      assigned_to: row.assigned_to
+    }));
+    render();
+  }
+
+  async function loadEmployees() {
+    if (currentProfile.role !== 'admin') return;
+    $('#employeeList').innerHTML = '<p class="no-results">Загружаем сотрудников…</p>';
+    const result = await callAdminApi(supabase, 'GET');
+    employees = result.users || [];
+    const rows = employees.map(person => `<div class="employee-row">
+      <div class="employee-person"><span class="employee-avatar">${safe((person.full_name || person.email || 'С').slice(0, 1).toUpperCase())}</span><div><b>${safe(person.full_name || 'Без имени')}</b><small>${safe(person.email)}</small></div></div>
+      <span class="employee-role">${person.role === 'admin' ? 'Администратор' : 'Менеджер'}</span>
+      <span class="employee-state ${person.is_active ? 'is-active' : 'is-disabled'}">${person.is_active ? 'Активен' : 'Отключён'}</span>
+      ${person.role === 'manager' ? `<button type="button" class="employee-toggle" data-toggle-employee="${safe(person.id)}" data-next-active="${person.is_active ? 'false' : 'true'}">${person.is_active ? 'Отключить' : 'Включить'}</button>` : '<span class="employee-protected">Защищён</span>'}
+    </div>`).join('');
+    $('#employeeList').innerHTML = rows || '<p class="no-results">Сотрудников пока нет.</p>';
+  }
+
+  async function refreshAll() {
+    try {
+      await loadOrders();
+      if (currentProfile.role === 'admin' && !$('#employeesView').classList.contains('active')) {
+        // Refresh the list only when it has already been opened at least once.
+      }
+      toast('Заявки обновлены из CRM.');
+    } catch (error) {
+      toast(error.message || 'Не удалось загрузить заявки.');
+      if (/сессия|доступ|прав/i.test(error.message || '')) await signOut();
     }
-    if(event.target.id==='quickImport')$('#draftImport').click();
+  }
+
+  async function saveRequestChanges() {
+    const request = requests.find(item => item.id === activeRequestId);
+    if (!request) return;
+    const saveButton = $('#saveRequestChanges');
+    saveButton.disabled = true;
+    saveButton.textContent = 'Сохраняем…';
+    try {
+      const payload = {
+        p_order_id: request.id,
+        p_status: $('#detailStatus').value,
+        p_priority: $('#detailPriority').value,
+        p_manager_note: $('#detailNote').value.trim(),
+        p_assigned_to: currentProfile.role === 'admin' ? ($('#detailAssignee').value || null) : null
+      };
+      const { error } = await supabase.rpc('staff_update_order', payload);
+      if (error) throw error;
+      closeDetail();
+      await loadOrders();
+      toast('Изменения сохранены в CRM.');
+    } catch (error) {
+      toast(error.message || 'Не удалось сохранить изменения.');
+    } finally {
+      if ($('#saveRequestChanges')) { $('#saveRequestChanges').disabled = false; $('#saveRequestChanges').textContent = 'Сохранить изменения в CRM'; }
+    }
+  }
+
+  async function createManager(event) {
+    event.preventDefault();
+    const form = $('#createManagerForm');
+    if (!form.reportValidity()) return;
+    const values = new FormData(form);
+    const button = form.querySelector('button[type="submit"]');
+    const status = $('#createManagerStatus');
+    button.disabled = true;
+    status.textContent = 'Создаём учётную запись…';
+    try {
+      const result = await callAdminApi(supabase, 'POST', {
+        full_name: String(values.get('full_name') || '').trim(),
+        email: String(values.get('email') || '').trim(),
+        password: String(values.get('password') || '')
+      });
+      form.reset();
+      status.textContent = `Создан аккаунт менеджера ${result.user.email}. Передайте сотруднику начальный пароль безопасным способом.`;
+      await loadEmployees();
+      toast('Менеджер добавлен.');
+    } catch (error) {
+      status.textContent = error.message || 'Не удалось создать менеджера.';
+    } finally { button.disabled = false; }
+  }
+
+  async function toggleEmployee(id, isActive) {
+    try {
+      await callAdminApi(supabase, 'PATCH', { id, is_active: isActive });
+      await loadEmployees();
+      toast(isActive ? 'Доступ менеджера включён.' : 'Доступ менеджера отключён.');
+    } catch (error) { toast(error.message || 'Не удалось изменить доступ.'); }
+  }
+
+  async function signOut() {
+    closeDetail();
+    if (supabase) await supabase.auth.signOut();
+    $('#managerApp').hidden = true;
+    $('#managerAuthGate').hidden = false;
+    currentProfile = null;
+    requests = [];
+    setLoginStatus('Вы вышли из рабочего кабинета.');
+  }
+
+  async function activateStaff(context) {
+    currentProfile = context.profile;
+    const isAdmin = currentProfile.role === 'admin';
+    if (!isAdmin && currentProfile.role !== 'manager') throw new Error('Это клиентский аккаунт. Для него предназначен личный кабинет клиента.');
+    $('#managerAuthGate').hidden = true;
+    $('#managerApp').hidden = false;
+    $('#staffName').textContent = currentProfile.full_name || context.user.email;
+    $('#staffAvatar').textContent = (currentProfile.full_name || context.user.email || 'С').slice(0, 1).toUpperCase();
+    $('#staffRoleLabel').textContent = isAdmin ? 'Администратор' : 'Менеджер';
+    $('#staffRoleChip').innerHTML = `<i></i> ${isAdmin ? 'АДМИНИСТРАТОР' : 'МЕНЕДЖЕР'}`;
+    $('#accessScopeText').textContent = isAdmin
+      ? 'Вы видите все заявки, можете назначать их менеджерам и управлять учётными записями сотрудников.'
+      : 'Вы видите только заявки, назначенные вашей учётной записи. Чужие заявки и внутренние данные других менеджеров недоступны.';
+    $$('[data-admin-only]').forEach(node => { node.hidden = !isAdmin; });
+    if (isAdmin) $('#employeesView').hidden = false;
+    $('#todayLabel').textContent = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(new Date());
+    $('#weekdayLabel').textContent = new Intl.DateTimeFormat('ru-RU', { weekday: 'long' }).format(new Date()).toLocaleUpperCase('ru-RU');
+    await refreshAll();
+    if (isAdmin) { try { await loadEmployees(); } catch (error) { toast(`Заявки доступны, но список сотрудников не загрузился: ${error.message}`); } }
+  }
+
+  $('#staffLoginForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    const button = form.querySelector('button[type="submit"]');
+    const values = new FormData(form);
+    button.disabled = true;
+    setLoginStatus('Проверяем учётную запись…');
+    try {
+      supabase = supabase || await getSupabase();
+      const { error } = await supabase.auth.signInWithPassword({ email: String(values.get('email') || '').trim(), password: String(values.get('password') || '') });
+      if (error) throw error;
+      const context = await getActiveUserProfile(supabase);
+      if (!context) throw new Error('Не удалось получить профиль пользователя.');
+      if (!['admin', 'manager'].includes(context.profile.role)) {
+        await supabase.auth.signOut();
+        throw new Error('У этой учётной записи нет прав сотрудника. Используйте личный кабинет клиента.');
+      }
+      await activateStaff(context);
+      form.reset();
+    } catch (error) {
+      setLoginStatus(error.message || 'Не удалось выполнить вход.', true);
+    } finally { button.disabled = false; }
   });
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDetail();if((event.key==='Enter'||event.key===' ')&&event.target.matches('[data-open-request]')){event.preventDefault();openDetail(event.target.dataset.openRequest);}});
-  $('#draftImport').addEventListener('change',event=>{importFile(event.target.files?.[0]);event.target.value='';});
-  $('#requestSearch').addEventListener('input',renderTable);$('#statusFilter').addEventListener('change',renderTable);$('#typeFilter').addEventListener('change',renderTable);$('#exportCsv').addEventListener('click',exportCsv);
-  $('#sidebarToggle').addEventListener('click',()=>$('#managerSidebar').classList.toggle('open'));
-  const now = new Date();
-  $('#todayLabel').textContent=new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(now);
-  $('#weekdayLabel').textContent=new Intl.DateTimeFormat('ru-RU',{weekday:'long'}).format(now).toLocaleUpperCase('ru-RU');
-  render();
+
+  document.addEventListener('click', async event => {
+    const nav = event.target.closest('[data-view]');
+    if (nav) { switchView(nav.dataset.view); return; }
+    const go = event.target.closest('[data-go-view]');
+    if (go) { switchView(go.dataset.goView); return; }
+    const open = event.target.closest('[data-open-request]');
+    if (open) {
+      const requestedId = open.dataset.openRequest;
+      try { await loadOrders(); openDetail(requestedId); }
+      catch (error) { toast(error.message || 'Не удалось проверить доступ к заявке.'); }
+      return;
+    }
+    const toggle = event.target.closest('[data-toggle-employee]');
+    if (toggle) { await toggleEmployee(toggle.dataset.toggleEmployee, toggle.dataset.nextActive === 'true'); return; }
+    if (event.target.id === 'detailBackdrop' || event.target.id === 'detailClose') { closeDetail(); return; }
+    if (event.target.id === 'saveRequestChanges') { await saveRequestChanges(); return; }
+    if (event.target.id === 'refreshOrders' || event.target.id === 'quickRefresh') { await refreshAll(); return; }
+    if (event.target.id === 'refreshEmployees') { await loadEmployees().then(() => toast('Список сотрудников обновлён.')).catch(error => toast(error.message)); return; }
+    if (event.target.id === 'staffLogout') { await signOut(); return; }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeDetail();
+    if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-open-request]')) {
+      event.preventDefault();
+      openDetail(event.target.dataset.openRequest);
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && currentProfile) refreshAll(); });
+  window.addEventListener('focus', () => { if (currentProfile) refreshAll(); });
+  $('#createManagerForm').addEventListener('submit', createManager);
+  $('#requestSearch').addEventListener('input', renderTable);
+  $('#statusFilter').addEventListener('change', renderTable);
+  $('#typeFilter').addEventListener('change', renderTable);
+  $('#sidebarToggle').addEventListener('click', () => $('#managerSidebar').classList.toggle('open'));
+  $('#exportCsv').addEventListener('click', () => {
+    const rows = [['Номер', 'Дата', 'Тип', 'Статус', 'Приоритет', 'Компания', 'Контакт', 'Телефон', 'Email', 'Город', 'Позиции', 'Комментарий']];
+    visibleRequests().forEach(request => rows.push([
+      request.code, fmtDateTime(request.date), TYPE[request.type], STATUS[request.status]?.label,
+      request.priority === 'high' ? 'Высокий' : 'Обычный', request.client.company, request.client.name,
+      request.client.phone, request.client.email, request.client.city,
+      request.items.map(item => `${item.name} — ${item.quantity} ${item.unit || 'шт.'}`).join('; '), request.comment
+    ]));
+    const csvCell = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+    const blob = new Blob(['\uFEFF' + rows.map(row => row.map(csvCell).join(';')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); link.href = url; link.download = 'nr-crm-requests.csv'; document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('CSV подготовлен.');
+  });
+
+  (async () => {
+    try {
+      supabase = await getSupabase();
+      const context = await getActiveUserProfile(supabase);
+      if (context) {
+        if (!['admin', 'manager'].includes(context.profile.role)) {
+          await supabase.auth.signOut();
+          setLoginStatus('Клиентский аккаунт не имеет доступа к кабинету сотрудников.');
+          return;
+        }
+        await activateStaff(context);
+      }
+    } catch (error) {
+      setLoginStatus(error.message || 'Не удалось подключиться к тестовой CRM.', true);
+    }
+  })();
 })();

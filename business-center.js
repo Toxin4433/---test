@@ -1,6 +1,6 @@
-// NR Business Center: локальная корзина заявок, запрос образцов и черновик запроса.
-// На этом этапе данные и файлы не отправляются на сервер и не сохраняются в localStorage,
-// кроме списка выбранных позиций. Контактные данные используются только для скачиваемого черновика.
+import { getSupabase, getActiveUserProfile } from './auth.js';
+
+// NR Business Center: корзина хранится локально, а оформленные заявки отправляются в тестовую CRM через защищённый RPC.
 (() => {
   const CART_KEY = 'nr-business-cart-v1';
   const MAX_ITEMS = 40;
@@ -189,6 +189,15 @@
     const fileList = center.querySelector('[data-business-file-list]');
     const status = center.querySelector('[data-business-status]');
     const form = center.querySelector('[data-business-request-form]');
+    getSupabase().then(async supabase => {
+      const context = await getActiveUserProfile(supabase);
+      if (context?.profile?.role === 'customer' && form) {
+        const nameField = form.elements.namedItem('name');
+        const emailField = form.elements.namedItem('email');
+        if (nameField && !nameField.value) nameField.value = context.profile.full_name || '';
+        if (emailField && !emailField.value) emailField.value = context.profile.email || context.user.email || '';
+      }
+    }).catch(() => {});
     const renderFiles = () => {
       if (!fileInput || !fileList) return;
       const files = [...(fileInput.files || [])];
@@ -216,7 +225,7 @@
       safeWrite([]); renderCart(); updateBadges();
       if (status) status.textContent = 'Список очищен.';
     });
-    form?.addEventListener('submit', event => {
+    form?.addEventListener('submit', async event => {
       event.preventDefault();
       const items = safeRead();
       if (!items.length) {
@@ -225,39 +234,89 @@
       }
       if (!form.reportValidity()) return;
       const data = new FormData(form);
-      const files = [...(fileInput?.files || [])];
-      const lines = [
-        'ЗАПРОС В ООО «НОВАЯ РЕАЛЬНОСТЬ»',
-        `Дата: ${new Date().toLocaleString('ru-RU')}`,
-        `Тип запроса: ${{quote:'Расчёт стоимости и условий',sample:'Запрос образцов',custom:'Индивидуальное изготовление'}[data.get('requestMode')] || 'Консультация'}`,
-        '', 'КОНТАКТЫ',
-        `Имя: ${data.get('name')}`,
-        `Компания: ${data.get('company') || 'не указана'}`,
-        `Телефон: ${data.get('phone')}`,
-        `Email: ${data.get('email') || 'не указан'}`,
-        `Город / регион: ${data.get('city') || 'не указан'}`,
-        `ИНН: ${data.get('inn') || 'не указан'}`,
-        '', 'ПОЗИЦИИ ЗАПРОСА'
-      ];
-      items.forEach((item,index) => {
-        lines.push(`${index+1}. ${item.name}`);
-        lines.push(`   Количество: ${formatNumber(item.quantity)} ${item.unit}`);
-        if (item.description) lines.push(`   Описание: ${item.description}`);
-        if (item.details) lines.push(`   Параметры: ${item.details.replace(/\n/g,'; ')}`);
-        if (item.requestSample) lines.push('   Дополнительно: запрошен образец');
-      });
-      lines.push('', 'КОММЕНТАРИЙ', String(data.get('comment') || 'не указан'));
-      lines.push('', 'ПРИЛОЖЕНИЯ', files.length ? files.map(file => `- ${file.name} (${(file.size/1024/1024).toFixed(2)} МБ)`).join('\n') : 'Файлы не приложены');
-      lines.push('', 'ВАЖНО: это предварительный запрос. Техническая возможность, характеристики, наличие, стоимость и условия поставки подтверждаются менеджером.');
-      lines.push('Файлы в браузере не загружаются на сервер. Их нужно приложить отдельно к письму или передать менеджеру.');
-      const blob = new Blob(['\uFEFF', lines.join('\n')], {type:'text/plain;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const now = new Date();
-      const stamp = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-      link.href = url; link.download = `novaya-realnost-zapros-${stamp}.txt`;
-      document.body.appendChild(link); link.click(); link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1200);
-      if (status) status.innerHTML = 'Черновик запроса скачан. <strong>Заявка ещё не отправлена:</strong> на сайте пока не подключена серверная отправка. Прикреплённые файлы также остаются на вашем устройстве. Позвоните менеджеру: <a href="tel:+79921476101">+7 (992) 147-61-01</a>.';
+      const name = String(data.get('name') || '').trim();
+      const phone = String(data.get('phone') || '').trim();
+      const email = String(data.get('email') || '').trim();
+      if (!name) { if (status) status.textContent = 'Укажите имя.'; return; }
+      if (!phone && !email) { if (status) status.textContent = 'Укажите хотя бы один способ связи: телефон или email.'; return; }
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton?.disabled) return;
+      if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Отправляем заявку…'; }
+      if (status) status.textContent = 'Сохраняем заявку в тестовой CRM…';
+
+      try {
+        const files = [...(fileInput?.files || [])];
+        const payload = {
+          name,
+          company: String(data.get('company') || '').trim(),
+          phone,
+          email,
+          city: String(data.get('city') || '').trim(),
+          inn: String(data.get('inn') || '').trim(),
+          type: String(data.get('requestMode') || 'quote'),
+          comment: String(data.get('comment') || '').trim(),
+          items: items.map(item => ({
+            name: String(item.name || '').slice(0, 160),
+            description: String(item.description || '').slice(0, 600),
+            details: String(item.details || '').slice(0, 1400),
+            quantity: Math.max(1, Math.min(10000000, Math.floor(Number(item.quantity) || 1))),
+            unit: String(item.unit || 'шт.').slice(0, 16),
+            requestSample: Boolean(item.requestSample),
+            kind: item.kind === 'configuration' ? 'configuration' : 'product'
+          })),
+          attachments: files.map(file => ({ name: file.name.slice(0, 180), size_bytes: file.size, content_type: file.type || 'application/octet-stream' }))
+        };
+
+        const supabase = await getSupabase();
+        const { data: savedOrder, error } = await supabase.rpc('create_order', { p_payload: payload });
+        if (error) throw error;
+        if (!savedOrder?.order_number) throw new Error('Сервер не вернул номер заявки. Проверьте журнал базы данных.');
+
+        const typeLabel = { quote: 'Расчёт стоимости и условий', sample: 'Запрос образцов', custom: 'Индивидуальное изготовление' }[payload.type] || 'Консультация';
+        const lines = [
+          'ЗАПРОС В ООО «НОВАЯ РЕАЛЬНОСТЬ»',
+          `Номер заявки CRM: ${savedOrder.order_number}`,
+          `Дата: ${new Date().toLocaleString('ru-RU')}`,
+          `Тип запроса: ${typeLabel}`,
+          '', 'КОНТАКТЫ',
+          `Имя: ${name}`,
+          `Компания: ${payload.company || 'не указана'}`,
+          `Телефон: ${phone || 'не указан'}`,
+          `Email: ${email || 'не указан'}`,
+          `Город / регион: ${payload.city || 'не указан'}`,
+          `ИНН: ${payload.inn || 'не указан'}`,
+          '', 'ПОЗИЦИИ ЗАПРОСА'
+        ];
+        items.forEach((item, index) => {
+          lines.push(`${index + 1}. ${item.name}`);
+          lines.push(`   Количество: ${formatNumber(item.quantity)} ${item.unit}`);
+          if (item.description) lines.push(`   Описание: ${item.description}`);
+          if (item.details) lines.push(`   Параметры: ${item.details.replace(/\n/g, '; ')}`);
+          if (item.requestSample) lines.push('   Дополнительно: запрошен образец');
+        });
+        lines.push('', 'КОММЕНТАРИЙ', payload.comment || 'не указан');
+        lines.push('', 'ПРИЛОЖЕНИЯ', files.length ? files.map(file => `- ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} МБ)`).join('\n') : 'Файлы не приложены');
+        lines.push('', 'ВАЖНО: это предварительный запрос. Техническая возможность, характеристики, наличие, стоимость и условия поставки подтверждаются менеджером.');
+        lines.push('Файлы пока не загружаются в CRM: в заявке сохранены только их названия и размеры.');
+
+        const blob = new Blob(['\uFEFF', lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `novaya-realnost-${savedOrder.order_number}.txt`;
+        document.body.appendChild(link); link.click(); link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+
+        safeWrite([]); renderCart(); updateBadges();
+        form.reset(); renderFiles();
+        if (status) status.innerHTML = `<strong>Заявка ${escapeHtml(savedOrder.order_number)} сохранена в CRM.</strong> Менеджер увидит её в рабочем кабинете. Черновик с номером заявки также скачан.`;
+      } catch (error) {
+        console.error('CRM order submit failed:', error);
+        if (status) status.textContent = `Не удалось отправить заявку: ${error.message || 'ошибка соединения'}. Данные формы и корзина сохранены на этой странице — попробуйте ещё раз.`;
+      } finally {
+        if (submitButton) { submitButton.disabled = false; submitButton.textContent = 'Отправить заявку в CRM ↓'; }
+      }
     });
   };
 

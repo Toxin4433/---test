@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Личный кабинет клиента ООО «Новая Реальность».">
+  <title>Личный кабинет — Новая Реальность</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="crm.css">
+  <link rel="icon" type="image/svg+xml" href="assets/brand-emblem.svg">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Новая Реальность — главная"><span class="brand-mark"><img class="brand-emblem" src="assets/brand-emblem.svg" alt="" width="48" height="48"></span><span>НОВАЯ РЕАЛЬНОСТЬ<small>ПОЛИМЕРНЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</small></span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="configurator.html">Конструктор</a><a href="tour.html">Экскурсия</a><a href="index.html#production">Производство</a><a href="kvass.html">Русский Квас</a><a href="business-center.html">Центр заказов</a><a class="active client-account-nav" href="account.html">Личный кабинет</a><a class="employee-portal-nav" href="manager.html">◈ Для сотрудников ↗</a>
+    </nav>
+    <div class="header-actions"><a class="employee-shortcut" href="manager.html">Для сотрудников ↗</a><a class="header-phone" href="tel:+79921476101">+7 (992) 147-61-01</a><button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false">☰</button></div>
+  </div>
+</header>
+<main class="account-main">
+  <section class="account-hero"><div class="container"><span class="eyebrow">NR · CLIENT ACCOUNT</span><h1>Ваши заказы<br><em>в одном месте.</em></h1><p>Создайте аккаунт по желанию, чтобы видеть историю заявок и отслеживать их статус. Оформить заказ можно и без регистрации.</p></div></section>
+  <section class="container account-content">
+    <div class="crm-message" id="accountStatus" role="status" aria-live="polite" hidden></div>
+    <section class="account-auth-card" id="accountAuthPanel">
+      <div class="account-card-heading"><span class="eyebrow">ЛИЧНЫЙ КАБИНЕТ</span><h2 id="authHeading">Войти в аккаунт</h2><p id="authIntro">Войдите, чтобы посмотреть свои заявки. Для входа сотрудника используйте отдельный портал.</p></div>
+      <div class="account-auth-tabs"><button type="button" class="active" data-auth-mode="login">Вход</button><button type="button" data-auth-mode="signup">Регистрация</button></div>
+      <form id="customerLoginForm" class="crm-form">
+        <label>Email<input name="email" type="email" autocomplete="email" required maxlength="160" placeholder="name@company.ru"></label>
+        <label>Пароль<input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128" placeholder="Ваш пароль"></label>
+        <button class="crm-primary-button" type="submit">Войти</button>
+      </form>
+      <form id="customerSignupForm" class="crm-form" hidden>
+        <label>Ваше имя<input name="full_name" autocomplete="name" required maxlength="100" placeholder="Как к вам обращаться"></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required maxlength="160" placeholder="name@company.ru"></label>
+        <label>Пароль<input name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="Не менее 8 символов"></label>
+        <label>Повторите пароль<input name="password_confirm" type="password" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="Повторите пароль"></label>
+        <button class="crm-primary-button" type="submit">Создать аккаунт</button>
+        <p class="crm-small-note">Регистрация необязательна. Создание аккаунта не требуется для отправки обычной заявки.</p>
+      </form>
+      <form id="passwordResetForm" class="crm-form" hidden>
+        <label>Новый пароль<input name="password" type="password" required minlength="8" maxlength="128" autocomplete="new-password"></label>
+        <button class="crm-primary-button" type="submit">Сохранить новый пароль</button>
+      </form>
+      <button type="button" class="crm-text-button" id="forgotPasswordButton">Забыли пароль?</button>
+    </section>
+
+    <section id="customerDashboard" class="customer-dashboard" hidden>
+      <div class="customer-dashboard-head"><div><span class="eyebrow">АККАУНТ КЛИЕНТА</span><h2>Здравствуйте, <span id="customerName">клиент</span>!</h2><p id="customerEmail"></p></div><button type="button" id="customerLogout" class="crm-outline-button">Выйти</button></div>
+      <div class="customer-orders-heading"><div><h3>История заявок</h3><p>Здесь отображаются заявки, оформленные после входа в ваш аккаунт.</p></div><a href="business-center.html" class="crm-primary-link">Новый запрос ↗</a></div>
+      <div id="customerOrders" class="customer-orders-list"><div class="crm-loading">Загружаем ваши заявки…</div></div>
+    </section>
+
+    <div class="account-help"><div><b>Оформляете запрос впервые?</b><p>Добавьте продукцию в Центре заказов, укажите имя и телефон или email — регистрация не обязательна.</p></div><a href="business-center.html">Перейти в Центр заказов ↗</a></div>
+  </section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-bottom"><span>© <span data-current-year>2026</span> ООО «Новая Реальность»</span><span>Личный кабинет клиента</span></div></div></footer>
+<script src="main.js"></script>
+<script type="module" src="account.js"></script>
+</body>
+</html>
