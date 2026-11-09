@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Эмблема «Новая Реальность»</title>
+  <desc id="desc">Стилизованная ПЭТ-колба в контуре производственного цикла, в бирюзово-золотой палитре.</desc>
+  <defs>
+    <linearGradient id="frame" x1="12" y1="8" x2="112" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#F4C779"/><stop offset=".48" stop-color="#D99B4B"/><stop offset="1" stop-color="#65C3D0"/></linearGradient>
+    <linearGradient id="glass" x1="43" y1="33" x2="88" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#E7FAFF" stop-opacity=".96"/><stop offset=".42" stop-color="#83D1E2" stop-opacity=".72"/><stop offset="1" stop-color="#2D829B" stop-opacity=".86"/></linearGradient>
+    <linearGradient id="gold" x1="35" y1="26" x2="91" y2="102" gradientUnits="userSpaceOnUse"><stop stop-color="#FFE1A0"/><stop offset="1" stop-color="#C78335"/></linearGradient>
+    <linearGradient id="teal" x1="28" y1="20" x2="105" y2="108" gradientUnits="userSpaceOnUse"><stop stop-color="#A5E9F2"/><stop offset="1" stop-color="#348DA7"/></linearGradient>
+    <filter id="shadow" x="3" y="3" width="122" height="122" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="2.5"/></filter>
+  </defs>
+  <path d="M64 6 111 33v62l-47 27L17 95V33L64 6Z" fill="#050B10" opacity=".42" filter="url(#shadow)"/>
+  <path d="M64 7.5 109 33.5v61L64 120.5 19 94.5v-61L64 7.5Z" fill="#17242C" stroke="url(#frame)" stroke-width="3.2"/>
+  <path d="M64 16 101 37.3v53.4L64 112 27 90.7V37.3L64 16Z" fill="#1E3039" stroke="#8CCAD7" stroke-opacity=".27" stroke-width="1.2"/>
+  <path d="M34 55c3.7-15.2 17.2-26 32.8-26 8.4 0 16.1 3.1 22 8.2" fill="none" stroke="url(#gold)" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="m83 34 7 4.2-1.1-8.1" fill="none" stroke="#F6C878" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M94 73c-3.7 15.2-17.2 26-32.8 26-8.4 0-16.1-3.1-22-8.2" fill="none" stroke="url(#teal)" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="m45 94-7-4.2 1.1 8.1" fill="none" stroke="#83D8E5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M54 37h20v10l5 5.5c3.1 3.4 4.8 7.9 4.8 12.5v22.4c0 5.2-4.2 9.4-9.4 9.4H53.6c-5.2 0-9.4-4.2-9.4-9.4V65c0-4.6 1.7-9.1 4.8-12.5l5-5.5V37Z" fill="url(#glass)" stroke="#D8F8FC" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M53 37h22v8H53z" fill="url(#gold)" stroke="#FFE7B5" stroke-width="1.3"/>
+  <path d="M56 32h16v5H56z" fill="#D69A4C"/>
+  <path d="M53 59c8 4.5 15 4.5 23 0" fill="none" stroke="#F7FFFF" stroke-opacity=".9" stroke-width="2" stroke-linecap="round"/>
+  <path d="M51 69v15c0 3.2 2.6 5.8 5.8 5.8" fill="none" stroke="#F8FFFF" stroke-opacity=".76" stroke-width="3" stroke-linecap="round"/>
+  <path d="M77 68v14" fill="none" stroke="#287B94" stroke-opacity=".7" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M57 75h14" stroke="#DDF8FB" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="31" cy="67" r="3.2" fill="#F0BD68" stroke="#FFE4AE" stroke-width="1"/>
+  <circle cx="97" cy="59" r="3.2" fill="#75D1E0" stroke="#C1F4F8" stroke-width="1"/>
+  <circle cx="91" cy="91" r="2.3" fill="#F0BD68"/><circle cx="37" cy="91" r="2.3" fill="#75D1E0"/>
+</svg>
